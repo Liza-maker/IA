@@ -214,7 +214,6 @@
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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" // Mets ta clé ici
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
