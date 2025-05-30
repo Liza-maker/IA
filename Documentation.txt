@@ -1,0 +1,6 @@
+-> Lancer Lance_scripts.bat
+-> Attendre 5 secondes
+-> Accéder à http://localhost:5001/doc.html
+-> Profiter du site web
+
+-> Après fermeture du site web, vous pouvez fermer les fenêtres de python et l'invite de commande ouverte qui se sont ouvertes. 
