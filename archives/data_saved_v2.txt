@@ -1,0 +1,8 @@
+-------------------------------------------------------------------
+Test du : 22/05, 12:01:35 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 27.10156
+Question posée : Salut
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Générateur d'e-mail - DOCia</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    textarea {
+      width: 90%;
+      max-width: 800px;
+      height: 150px;
+      margin-bottom: 20px;
+      padding: 15px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      resize: none;
+    }
+
+    button {
+      padding: 10px 25px;
+      font-size: 1.2rem;
+      background-color: #1c24c4;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    #output {
+      margin-top: 30px;
+      width: 90%;
+      max-width: 800px;
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Générateur d'e-mail</h1>
+ <textarea id="promptInput" placeholder="Écris ton message ici..."></textarea>
+<button onclick="envoyerPrompt()">Générer</button>
+<pre id="resultat"></pre>
+
+<script>
+  async function envoyerPrompt() {
+    const prompt = document.getElementById('promptInput').value;
+    const responseDiv = document.getElementById('resultat');
+
+    const response = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'mistral', // ou 'llama3' ou autre selon ce que tu as téléchargé
+        prompt: prompt,
+        stream: false
+      })
+    });
+
+    const data = await response.json();
+    responseDiv.textContent = data.response;
+  }
+</script>
+
+</body>
+</html>
