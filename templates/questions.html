@@ -166,7 +166,7 @@
 
   <div class="container">
     <div class="upload-column">
-      <img src="../static/images/Upload-Icon.png" alt="Upload Icon">
+      <img src="{{ url_for('static', filename='images/Upload-Icon.png') }}" alt="Upload Icon">
       <p>Déposer votre fichier (PDF)</p>
 
       <!-- Le formulaire n'est plus soumis automatiquement -->
@@ -184,7 +184,7 @@
 
     <div class="summary-column">
       <h3>Génération du chat...</h3>
-      <p id="summary-text">En attente du fichier...</p>
+      <p id="summary-text">En attente du fichier</p>
       <button onclick="location.reload()">Réessayez</button>
     </div>
   </div>

@@ -92,6 +92,15 @@
       margin: 0 auto 20px;
     }
 
+    textarea, select {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: 'Inter', sans-serif;
+    }
+
     .socials {
       display: flex;
       justify-content: center;
@@ -173,6 +182,18 @@
         <input type="file" name="file" accept=".pdf" required>
         <input type="hidden" name="platform" id="platform-input">
       </form>
+
+      <!-- Nouveau champ prompt personnalisé -->
+      <textarea id="customPrompt" placeholder="Ajoutez une consigne (ex: MAX a gagné ce match)..." rows="3"></textarea>
+
+      <!-- Nouveau filtre de style -->
+      <select id="styleFilter">
+        <option value="">Style de résumé (optionnel)</option>
+        <option value="drôle">Résumé drôle</option>
+        <option value="créatif">Résumé créatif</option>
+        <option value="attractif">Résumé attractif</option>
+      </select>
+
       <div class="socials">
         <button type="button" onclick="submitWithPlatform(this, 'Instagram')">Instagram</button>
         <button type="button" onclick="submitWithPlatform(this, 'Site web')">Site web</button>
@@ -184,30 +205,56 @@
     <div class="summary-column">
       <h3>Génération du résumé...</h3>
       <p id="summary-text">En attente du fichier...</p>
+      <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
       <button onclick="location.reload()">Réessayez</button>
     </div>
   </div>
 
 <script>
+let timerInterval;
+let seconds = 0;
+
+function startTimer() {
+  const timer = document.getElementById("timer");
+  seconds = 0;
+  timer.innerText = "⏱ Temps écoulé : 0 s";
+
+  timerInterval = setInterval(() => {
+    seconds++;
+    timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
 async function submitWithPlatform(buttonElement, platform) {
   const fileInput = document.querySelector('input[type="file"]');
   const platformInput = document.getElementById("platform-input");
   const summaryText = document.getElementById("summary-text");
+  const customPrompt = document.getElementById("customPrompt").value;
+  const styleFilter = document.getElementById("styleFilter").value;
+  const timerElement = document.getElementById("timer");
 
   if (!fileInput.files.length) {
     alert("Veuillez d'abord choisir un fichier PDF.");
     return;
   }
 
-  // Met à jour l'apparence des boutons
   const allButtons = document.querySelectorAll('.socials button');
   allButtons.forEach(btn => btn.classList.remove('active'));
   buttonElement.classList.add('active');
 
   platformInput.value = platform;
+
   const formData = new FormData(document.getElementById("upload-form"));
+  formData.append("custom_prompt", customPrompt);
+  formData.append("style_filter", styleFilter);
 
   summaryText.innerText = "⏳ Génération du résumé en cours...";
+  startTimer();
+
   try {
     const response = await fetch("http://127.0.0.1:5000/upload", {
       method: "POST",
@@ -217,14 +264,19 @@ async function submitWithPlatform(buttonElement, platform) {
     if (response.ok) {
       const data = await response.json();
       summaryText.innerText = data.summary;
+      stopTimer();
+      timerElement.innerText += `  (Durée serveur : ${data.duration}s)`;
     } else {
       summaryText.innerText = "❌ Erreur lors de la génération.";
+      stopTimer();
     }
   } catch (error) {
     summaryText.innerText = "⚠️ Problème de connexion.";
+    stopTimer();
   }
 }
 </script>
+
 
 </body>
 </html>

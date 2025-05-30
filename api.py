@@ -11,7 +11,7 @@ from langchain.schema import Document
 import ollama
 from sentence_transformers import SentenceTransformer
 import faiss
-
+import time 
 
 print("Début du programme...")
 app = Flask(__name__)
@@ -34,11 +34,11 @@ def generate_summary(prompt):
     response = requests.post(OLLAMA_URL, json={
         "model": "llama3.1",
         "prompt": prompt,
+        "temperature":0.2,
         "stream": False
     })
     result = response.json()
     return result.get("response", "").strip()
-
 
 def readPdf(list_file):
     """
@@ -92,23 +92,24 @@ def embedding_texts(chunks,user_text):
     Returns:
         output_text : Top k (k=4) des similarités entre chunks et question
     """
-    #On embedding (transférer les phrases par des vecteurs) (documents puis question utilisateur)
-    modelEmbedding = SentenceTransformer("all-MiniLM-L6-v2")
-    embedding = modelEmbedding.encode(chunks, show_progress_bar=True, convert_to_numpy=True)
+    print("Chunks : ",chunks)
+    if len(chunks) > 0:
+        
+        #On embedding (transférer les phrases par des vecteurs) (documents puis question utilisateur)
+        modelEmbedding = SentenceTransformer("all-MiniLM-L6-v2")
+        embedding = modelEmbedding.encode(chunks, show_progress_bar=True, convert_to_numpy=True)
 
-    embedding_user = modelEmbedding.encode([user_text],show_progress_bar=True, convert_to_numpy=True).astype("float32")
-    #------------------------------------
-    
-    dimension = embedding.shape[1]
-    print("Les dimensions sont : ",dimension)
-    index = faiss.IndexFlatIP(dimension)  # 32 = nombre de voisins (standard)
-    output_text = []
-    #on ajoute les embeddings : 
-    index.add(embedding)
-    distances, indices = index.search(embedding_user, k=4)
-    for i, idx in enumerate(indices[0]):
-        output_text.append(chunks[idx])
-    return output_text
+        embedding_user = modelEmbedding.encode([user_text],show_progress_bar=True, convert_to_numpy=True).astype("float32")    
+        dimension = embedding.shape[1]
+        index = faiss.IndexFlatIP(dimension)  # 32 = nombre de voisins (standard)
+        output_text = []
+        #on ajoute les embeddings : 
+        index.add(embedding)
+        distances, indices = index.search(embedding_user, k=4)
+        for i, idx in enumerate(indices[0]):
+            output_text.append(chunks[idx])
+        return output_text
+    return False
 
 def predict_with_ollama(context, question, model_name="llama3.1"):
     """Fonction qui génère le résultat du modèle
@@ -121,7 +122,7 @@ def predict_with_ollama(context, question, model_name="llama3.1"):
     Returns:
         result["response"] : Réponse du modèle à la question de l'utilisateur
     """
-    
+    print(context)
     prompt = f"""Voici des extraits de documents :\n{context}\n\nQuestion : {question}\n :
     Répond en utilisant principalement les extraits de document et en reformulant.
     N'inclus ni ton avis ni ton analyse.
@@ -141,6 +142,8 @@ def questionUtilisateur():
             docs = readPdf([file])
             chunks = chuncking_doc(docs)
             embeddings_text = embedding_texts(chunks,text_user)
+            if not embeddings_text:
+                return jsonify({"summary": "Désolé, le fichier n'est pas adapté à l'extraction de texte."})
             l = predict_with_ollama(embeddings_text,text_user)
             return jsonify({"summary": l})
 
@@ -148,15 +151,15 @@ def questionUtilisateur():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    print("Début de upload...")
+    start_time = time.time()
+
     file = request.files['file']
     platform = request.form.get('platform', 'générique')
-
-    prompts = {
-        "Instagram": (
-            "Crée un résumé percutant pour une story Instagram, en français. Utilise des émojis 📸✨, "
-            "des phrases courtes et visuelles. Le texte doit être prêt à être publié."
-        ),
+    filter_style = request.form.get('style_filter', '')
+    extra_prompt = request.form.get('custom_prompt', '').strip()
+    print("Informations reçus !")
+    base_prompts = {
+        "Instagram": "Crée un résumé percutant pour une story Instagram, en français. Utilise des émojis 📸✨, des phrases courtes et visuelles. Le texte doit être prêt à être publié.",
         "Facebook": "Crée un résumé informatif et engageant pour une publication Facebook, en français.",
         "Linkedin": "Fais un résumé très court et professionnel (moins de 280 caractères) pour Linkedin.",
         "Site web": "Crée un résumé clair, professionnel et structuré pour un site web.",
@@ -164,27 +167,39 @@ def upload():
         "générique": "Fais un résumé court et clair de ce document PDF."
     }
 
-    if file.filename.endswith('.pdf'):
-        print("PDF reçu !")
+    filter_prompts = {
+        "attrayant": "Rends ce résumé très attrayant et captivant.",
+        "drôle": "Ajoute une touche d'humour et rends ce résumé drôle.",
+        "créatif": "Sois créatif et original dans le résumé.",
+        "professionnel": "Rends ce résumé très professionnel et sérieux."
+    }
+
+    if file and file.filename.endswith('.pdf'):
         filename = secure_filename(file.filename)
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
-        print("Extraction du texte en cours...")
-        text = extract_text_from_pdf(filepath)
-        print("Chunking du texte en cours...")
-        chunks = chunk_text(text)
 
+        text = extract_text_from_pdf(filepath)
+        chunks = chunk_text(text)
+        print("Chunks effectués pour résumer !")
         all_summaries = []
-        print("Création du résumé en cours...")
         for chunk in chunks:
-            prompt = f"{prompts.get(platform, prompts['générique'])}\n\nTexte :\n{chunk}\n\nRésumé :"
-            summary = generate_summary(prompt)
+            prompt_parts = [base_prompts.get(platform, base_prompts['générique'])]
+            if filter_style in filter_prompts:
+                prompt_parts.append(filter_prompts[filter_style])
+            if extra_prompt:
+                prompt_parts.append(extra_prompt)
+            prompt_parts.append(f"\nTexte :\n{chunk}\n\nRésumé :")
+
+            full_prompt = "\n".join(prompt_parts)
+            summary = generate_summary(full_prompt)
             all_summaries.append(summary)
-        print("Le résumé envoyé est :",all_summaries)
-        print("Réponse envoyé au JSON !")
-        return jsonify({"summary": "\n\n".join(all_summaries)})
+
+        duration = round(time.time() - start_time, 2)
+        return jsonify({"summary": "\n\n".join(all_summaries), "duration": duration})
     else:
         return "Format non pris en charge", 400
+
 
 
 
