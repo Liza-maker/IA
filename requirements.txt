@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+Werkzeug
+PyMuPDF
+requests
+pypdf
+langchain
+ollama
+sentence-transformers
+faiss-cpu
