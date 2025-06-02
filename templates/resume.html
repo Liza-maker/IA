@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DOCia - Résumé</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: #000;
+    }
+
+    header {
+      padding: 60px;
+      font-size: 3.5rem;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .circle-arrow {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .circle-arrow::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-left: 3px solid black;
+      border-bottom: 3px solid black;
+      transform: rotate(45deg);
+      margin-left: 4px;
+    }
+
+    .circle-arrow:active {
+      background-color: #007BFF;
+      border-color: #007BFF;
+    }
+
+    .circle-arrow:active::before {
+      border-left-color: white;
+      border-bottom-color: white;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 100px;
+      padding: 0 40px;
+      flex-wrap: wrap;
+    }
+
+    .upload-column, .summary-column {
+      background-color: #f5f3f3;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 0 0 1px #ccc;
+    }
+
+    .upload-column {
+      width: 450px;
+      text-align: center;
+    }
+
+    .upload-column img {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
+    .upload-column p {
+      margin: 10px 0 30px;
+      font-size: 1rem;
+    }
+
+    form input[type="file"] {
+      display: block;
+      margin: 0 auto 20px;
+    }
+
+    textarea, select {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .socials button {
+      padding: 10px 18px;
+      font-weight: bold;
+      border: 1px solid #000;
+      border-radius: 25px;
+      background: #fff;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .socials button.active {
+      background: #000;
+      color: #fff;
+    }
+
+    .summary-column {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 380px;
+    }
+
+    .summary-column h3 {
+      margin-top: 0;
+      font-weight: 400;
+      font-size: 1.2rem;
+    }
+
+    .summary-column p {
+      flex-grow: 1;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .summary-column button {
+      align-self: flex-end;
+      padding: 8px 16px;
+      border: 1px solid #000;
+      border-radius: 20px;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    @media (max-width: 1000px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .upload-column, .summary-column {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    DOCia.
+    <a href="doc.html" class="circle-arrow" title="Retour à l'accueil"></a>
+  </header>
+
+  <div class="container">
+    <div class="upload-column">
+      <img src="{{ url_for('static', filename='images/Upload-Icon.png') }}" alt="Upload Icon">
+      <p>Déposer votre fichier (pdf) ici</p>
+      <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf" required>
+        <input type="hidden" name="platform" id="platform-input">
+      </form>
+
+      <!-- Nouveau champ prompt personnalisé -->
+      <textarea id="customPrompt" placeholder="Ajoutez une consigne (ex: MAX a gagné ce match)..." rows="3"></textarea>
+
+      <!-- Nouveau filtre de style -->
+      <select id="styleFilter">
+        <option value="">Style de résumé (optionnel)</option>
+        <option value="drôle">Résumé drôle</option>
+        <option value="créatif">Résumé créatif</option>
+        <option value="attractif">Résumé attractif</option>
+      </select>
+
+      <div class="socials">
+        <button type="button" onclick="submitWithPlatform(this, 'Instagram')">Instagram</button>
+        <button type="button" onclick="submitWithPlatform(this, 'Site web')">Site web</button>
+        <button type="button" onclick="submitWithPlatform(this, 'Facebook')">Facebook</button>
+        <button type="button" onclick="submitWithPlatform(this, 'Presse')">Presse</button>
+      </div>
+    </div>
+
+    <div class="summary-column">
+      <h3>Génération du résumé...</h3>
+      <p id="summary-text">En attente du fichier...</p>
+      <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
+      <button onclick="location.reload()">Réessayez</button>
+    </div>
+  </div>
+
+<script>
+let timerInterval;
+let seconds = 0;
+
+function startTimer() {
+  const timer = document.getElementById("timer");
+  seconds = 0;
+  timer.innerText = "⏱ Temps écoulé : 0 s";
+
+  timerInterval = setInterval(() => {
+    seconds++;
+    timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+async function submitWithPlatform(buttonElement, platform) {
+  const fileInput = document.querySelector('input[type="file"]');
+  const platformInput = document.getElementById("platform-input");
+  const summaryText = document.getElementById("summary-text");
+  const customPrompt = document.getElementById("customPrompt").value;
+  const styleFilter = document.getElementById("styleFilter").value;
+  const timerElement = document.getElementById("timer");
+
+  if (!fileInput.files.length) {
+    alert("Veuillez d'abord choisir un fichier PDF.");
+    return;
+  }
+
+  const allButtons = document.querySelectorAll('.socials button');
+  allButtons.forEach(btn => btn.classList.remove('active'));
+  buttonElement.classList.add('active');
+
+  platformInput.value = platform;
+
+  const formData = new FormData(document.getElementById("upload-form"));
+  formData.append("custom_prompt", customPrompt);
+  formData.append("style_filter", styleFilter);
+
+  summaryText.innerText = "⏳ Génération du résumé en cours...";
+  startTimer();
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      summaryText.innerText = data.summary;
+      stopTimer();
+      timerElement.innerText += `  (Durée serveur : ${data.duration}s)`;
+    } else {
+      summaryText.innerText = "❌ Erreur lors de la génération.";
+      stopTimer();
+    }
+  } catch (error) {
+    summaryText.innerText = "⚠️ Problème de connexion.";
+    stopTimer();
+  }
+}
+</script>
+
+
+</body>
+</html>

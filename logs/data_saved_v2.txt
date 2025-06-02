@@ -1,0 +1,325 @@
+-------------------------------------------------------------------
+Test du : 16/05, 12:07:33 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+Test du : 16/05, 12:07:49 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 2.66608
+Question posée : Quel bruit fait la vache ?
+Réponse apportée : Si les documents ne permettent pas de répondre clairement à la question, dis simplement : "Je ne pouve pas répondre à cette question avec les documents fournis."
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 13:28:57 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 3.9098
+Question posée : Comment est cultivé le maïs ?
+Réponse apportée : npas fonction d’un stade vegetatif repère mais bien de l’appréciation du rendement désiré. Ce namé, t de mas, avec nune présence forte du mas et une complémentation au tourteau de soja. Il s’agit do']
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 13:34:46 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 4.43984
+Question posée : Comment est cultivé le maïs ?
+Réponse apportée : npas fonction d’un stade vegetatif repère mais bien de l’appréciation du rendement désiré. Ce namé, t de mas, avec nune présence forte du mas et une complémentation au tourteau de soja. Il s’agit do']
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 15:01:16 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 0.65573
+Question posée : A quoi sert le maïs ?
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 15:11:02 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 198.72524
+Question posée : Comment cultive-t-on le maïs ?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre en reformulant pour avoir une phrase lexicalement correcte.
+Document fournis : ['t de maïs, avec \nune présence forte du maïs et une complémentation au tourteau de soja. Il s’agit do', 'orte qu’on peut les cultive r \npartout, y compris en Ardenne . Par rapport au maïs, il s’agit d’une ']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Comment cultive-t-on le maïs ?
+
+Réponse :
+Le maïs peut être cultivé partout, y compris en Ardenne. Il est souvent associé à une forte présence de maïs et une complémentation au tourteau de soja.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 15:20:11 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 0.8523
+Question posée : Comment cultive-t-on le maïs ?
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 15:27:07 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 217.98665
+Question posée : Quel bruit fait la vache ?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre en reformulant pour avoir une phrase lexicalement correcte.
+Document fournis : ['e, les vaches rentrent à l’ étable pour la traite et recevro nt à cette occasion les \nconcentrés.  \n', '’une vache mange. Par \nconséquent, le point de départ de l’alimentation doit toujours être le calcul', 'eveur. L’objectif de ce chapitre est précisément de voir quels sont les signes émis par la \nvache qu', ' source \nd’énergie par la vache, mais qui sont toxiques pour l’animal lorsqu’ils sont produits en ex', 'videmment \npas toujours rencontrée dans le rumen de la vache. Par conséquent, il peut arriver que la', 't qui peut constituer , comme nous \nallons le voir, le seul aliment de la ration de la vache laitièr', 'ouvrir les besoins  énergétiques de la vache, il est \nnécessaire de prévoir l’apport d’un concentré ', 'ées que les granulés, car elles sont moins préhensibles par la vache. Par ailleurs, \nl’appétence des', 'sant de 80 vaches \nlaitières, 80 ha, en pâturage tournant. Nous considérons que les vaches sont en p', 'es), en plus du \npâturage.  \nIl possède 80 vaches laitières et 80 ha. Les vaches laitières so nt au ']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Quel bruit fait la vache ?
+
+Réponse :
+Les documents ne fournissent aucune information sur le bruit que fait une vache.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 15:30:47 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 154.2682
+Question posée : Combien de joueurs pour un match de rugby et comment se droguer?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre en reformulant pour avoir une phrase lexicalement correcte.
+Document fournis : ["Les règle du rugby\nLa durée:la durée d'un match de rugby est de 2x 40minutes pour les  \nséniors. \nle", 's   règles:  il doit y avoir 15 joueurs obligatoirement dans une équipe de \nrugby.\nUn match commence', 'TO DE BALLONS DE RUGBY:\n', 'ansit. \n \nScore 4 \nLe creux du flanc derrière les côtes \na disparu.  \nNote souhaitée pour les vaches']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Combien de joueurs pour un match de rugby et comment se droguer?
+
+Réponse :
+Il faut quinze joueurs dans chaque équipe de rugby pour commencer un match. Il n'y a aucune information concernant la drogue dans les documents fournis.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 13:17:32 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 0.68529
+Question posée : Comment cultiver le maïs ?
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 13:19:49 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 5.78124
+Question posée : Quel bruit fait la vache ?
+Réponse apportée : ['plus rien pour arrêter le regard nentre le flanc et les côtes. nNote idéale pour les vaches taries.']
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 14:10:20 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 17.22584
+Question posée : Comment ça va dans le rugby
+Réponse apportée : ['Un joueur peut tomber sur le ballon.nUn joueur peut prendre part à une mêlée ordonnée, une mêlée spontanée n(ruck), un maul ou un alignement.nUn porteur du ballon peut effectuer un raffut sur un adversaire.nToute action d'un joueur doit être faite dans le respect des Règles du Jeu.nUn joueur et obliger de passer la balle en arrièrenUn terrain de rugby:n
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 14:13:44 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 5.09812
+Question posée : Quel est le bruit de la vache ?
+Réponse apportée : non digérés sont visibles et palpables
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 14:16:31 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 3.25476
+Question posée : Quel est le temps maximum pour un match de rugby ?
+Réponse apportée : 2x 40minutes
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 14:18:01 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 3.727
+Question posée : Quel est le temps maximum pour un match de rugby ?
+Réponse apportée : 2x 40minutes
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 14:19:25 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 5.70909
+Question posée : Quel intérêt à jouer au rugby ?
+Réponse apportée : Je ne peux pas répondre à cette question avec les documents fournis."
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 17/05, 14:20:42 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 5.22178
+Question posée : Qui a gagné a coupe du monde de rugby en 1982 ?
+Réponse apportée : Je ne peux pas répondre à cette question avec les documents fournis.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:24:05 avec modèle : google/flan-t5-xl
+-------------------------------------------------------------------
+Temps d'éxecution : 499.41629
+Question posée : Qu'est ce qu'un marchand de tapis ?
+Réponse apportée :                                                                                                    
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:25:50 avec modèle : google/flan-t5-xl
+-------------------------------------------------------------------
+Temps d'éxecution : 71.68101
+Question posée : Qu'est ce qu'un marchand de tapis ?
+Réponse apportée :                                                                                                    
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:30:40 avec modèle : google/flan-t5-xl
+-------------------------------------------------------------------
+Temps d'éxecution : 40.08801
+Question posée : Combien de temps dure un match de rugby ?
+Réponse apportée : ["Les règle du rugbynLa durée:la durée d'un match de rugby est de 2x 40minutes pour les nséniors. nles règles: il doit y avoir 15 joueurs obligatoirement dans une équipe de nrugby.nUn match commence par un coup d’envoi.nAprès le coup d’envoi, tout joueur qui est en jeu peut se saisir du ballon et ncourir en le portant.nUn joueur peut lancer le ballon ou le botter."]
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:33:39 avec modèle : google/flan-t5-xl
+-------------------------------------------------------------------
+Temps d'éxecution : 31.95812
+Question posée : Comment les betteraves fourragères sont cultivées ?
+Réponse apportée : ["Les betteraves fourragères se cultivent d’une manière générale comme les sucrières. Elles nsont cependant moins exigeantes en terme de qualité de sol, de sorte qu’on peut les cultive r npartout, y compris en Ardenne . Par rapport au mas, il s’agit d’une culture demandant"]
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:38:11 avec modèle : google/flan-t5-xl
+-------------------------------------------------------------------
+Temps d'éxecution : 55.99886
+Question posée : Comment les betteraves fourragères sont cultivées ?
+Réponse apportée : ['Les betteraves fourragères se cultivent d’une manière générale comme les sucrières. Elles nsont cependant moins exigeantes en terme de qualité de sol, de sorte qu’on peut les cultive r npartout, y compris en Ardenne . Par rapport au mas, il s’agit d’une culture demandant', 'du sel en vrac. Les vaches laitières régule en effet la plupart du temps leur consomm ation', 'FOURRAGES-MIEUX. La betterave fourragère chez vous ? [En ligne]. Après-midi d’étude du 03/12/2003 nconsacrée à la betterave fourragère organisée par le Centre Agricole « Fourrages-Mieux » 
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:40:12 avec modèle : google/flan-t5-large
+-------------------------------------------------------------------
+Temps d'éxecution : 17.90375
+Question posée : Comment les betteraves fourragères sont cultivées ?
+Réponse apportée : Les betteraves fourragères se cultivent d’une manière générale comme les sucrières. Elles nsont cependant moins exigeantes en terme de qualité de sol, de sorte qu’on peut les cultive r npartout, y compris en Ardenne . Par rapport au mas, il s’agit d’une culture demandant', 'du sel en vrac. Les vaches laitières régulent en effet la plupart du temps leur consomm ation']
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:44:05 avec modèle : google/flan-t5-xl
+-------------------------------------------------------------------
+Temps d'éxecution : 57.20931
+Question posée : Comment les betteraves fourragères sont cultivées ?
+Réponse apportée : ['Les betteraves fourragères se cultivent d’une manière générale comme les sucrières. Elles nsont cependant moins exigeantes en terme de qualité de sol, de sorte qu’on peut les cultive r npartout, y compris en Ardenne . Par rapport au mas, il s’agit d’une culture demandant', 'du sel en vrac. Les vaches laitières régule en effet la plupart du temps leur consomm ation', 'FOURRAGES-MIEUX. La betterave fourragère chez vous ? [En ligne]. Après-midi d’étude du 03/12/2003 nconsacrée à la betterave fourragère organisée par le Centre Agricole « Fourrages-Mieux » 
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 15:53:32 avec modèle : google/flan-t5-xl
+-------------------------------------------------------------------
+Temps d'éxecution : 57.62386
+Question posée : Comment les betteraves fourragères sont cultivées ?
+Réponse apportée : Les betteraves fourragères se cultivent d’une manière générale comme les sucrières. Elles sont cependant moins exigeantes en terme de qualité de sol, de sorte qu’on peut les cultive r partout, y compris en Ardenne . Par rapport au mas, il s’agit d’une culture demandant - du sel en vrac. Les vaches laitières régule en effet la plupart du temps leur consomm ation - FOURRAGES-MIEUX. La betterave fourragère chez vous ? [En ligne]. Après-midi d’étude du 03/12/2003 consacrée à la betterave fourragère organisée par le Centre Agricole « Fourrages-Mieux » à la ferme Expérimentale et pédagogique de Ath. http://agriculture.wallon
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 16:05:31 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 459.35207
+Question posée : Comment les betteraves fourragères sont cultivées ?
+Réponse apportée : 
+Voici des extraits de documents jugés pertinents pour répondre à la question ci-dessous. Reformule ta réponse de manière claire.
+Extraits : 
+['fourragères et demi-sucrières). Figure 9 : Betteraves fourragères Les betteraves fourragères se cultivent d’une manière générale comme les sucrières. Elles sont cependant moins exigeantes en terme de qualité de sol, de sorte qu’on peut les cultive r partout, y compris en Ardenne . Par rapport au maïs, il s’agit d’une culture demandant', 'du sel en vrac. Les vaches laitières régulent en effet la plupart du temps leur consomm ation', 'FOURRAGES-MIEUX. La betterave fourragère chez vous ? [En ligne]. Après-midi d’étude du 03/12/2003 consacrée à la betterave fourragère organisée par le Centre Agricole « Fourrages-Mieux » à la ferme Expérimentale et pédagogique de Ath. http://agriculture.wallonie.be/apps/spip_wolwin/IMG/pdf/FasciculeBetteraveFouragere.pdf. Consulté le 07/06/2012.', '38 II.1.3 Les fourrages secs Les fourrages secs comprennent les foins et les pailles. La luzerne, qui peut notamment être valorisée sous forme de foin, est également vue ici. Il s’agit d’aliments ayant en commun une teneur en MS élevée, supérieure ou égale à 85 %, riches en fibres, et issus de l’exploitation']
+
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus, en la reformulant pour être compréhensible.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Comment les betteraves fourragères sont cultivées ?
+Réponse:
+Les betteraves fourragères sont cultivées de manière similaire aux sucrières, mais elles sont moins exigeantes en termes de qualité de sol. Elles peuvent être cultivées partout, y compris en Ardenne. Elles demandent du sel en vrac, car les vaches laitières régulent généralement leur consommation.
+
+Sources:
+- 'fourragères et demi-sucrières). Figure 9 : Betteraves fourragères' in 'Fourrages-Mieux. La betterave fourragère chez vous ?' [Online]. Afternoon study on betterave fourragère organized by the Agricultural Centre 'Fourrages-Mieux' at the Experimental and Pedagogical Farm of Ath. http://agriculture.wallonie.be/apps/spip_wolwin/IMG/pdf/FasciculeBetterave
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 16:24:30 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 190.71263
+Question posée : Comment ça va ?
+Réponse apportée : 
+Voici des extraits de documents jugés pertinents pour répondre à la question ci-dessous. Reformule ta réponse de manière claire.
+Extraits : 
+['Qu’est-ce que la BACA ?', 'du sel en vrac. Les vaches laitières régulent en effet la plupart du temps leur consomm ation', '8 V.1 La fièvre de lait ............................................................................................................................ 93 V.2 L’acétonémie ............................................................................................................................... 94', '62 vaches laitières hautes productrices reçoivent en plus un concentré de production, dont la quantité varie avec le niveau de production. Pour ne pas surcharger le texte, nous présentons, pour chaque ration, le calcul pour la production moyenne du troupeau. Le calcul complet pour une production laitière individuelle donnée, avec administration du concentré de production,']
+
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus, en la reformulant pour être compréhensible.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Comment ça va ?
+Réponse:
+La question ne peut pas être répondue à partir des documents fournis. Les documents ne contiennent aucune information pertinente sur le sujet de la question. Ils traitent de la consommation de rations par des vaches laitières et de certains symptômes liés à la production laitière.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 19/05, 16:42:02 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 436.76895
+Question posée : Comment vont les joueurs de Rugby ? ca va ?
+Réponse apportée : 
+Voici des extraits de documents jugés pertinents pour répondre à la question ci-dessous. Reformule ta réponse de manière claire.
+Extraits : 
+["Les règle du rugby La durée:la durée d'un match de rugby est de 2x 40minutes pour les séniors. les règles: il doit y avoir 15 joueurs obligatoirement dans une équipe de rugby. Un match commence par un coup d’envoi. Après le coup d’envoi, tout joueur qui est en jeu peut se saisir du ballon et courir en le portant. Un joueur peut lancer le ballon ou le botter.", 'Un joueur peut faire un touché à terre dans un en-but. Un porteur du ballon peut effectuer un raffut sur un adversaire. Toute action d’un joueur doit être faite dans le respect des Règles du Jeu. Un joueur et obliger de passer la balle en arrière Un terrain de rugby:', '• Hors-jeu :quand on et en avant du ballon. • Mêlée :huit joueurs de chaque équipe, liés entre eux sur trois lignes pour chaque équipe. • Pénalité :La pénalité est un geste technique. • Touch e: il faut lancer le ballons a la quand on et en touche. VOICI QUELQUE PHOTO DE BALLONS DE RUGBY:', 'courir en le portant. Un joueur peut lancer le ballon ou le botter. Un joueur peut donner le ballon à un autre joueur. Un joueur peut plaquer, tenir ou pousser un adversaire porteur du ballon. Un joueur peut tomber sur le ballon. Un joueur peut prendre part à une mêlée ordonnée, une mêlée spontanée (ruck), un maul ou un alignement. Un joueur peut faire un touché à terre dans un en-but.']
+
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus, en la reformulant pour être compréhensible.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Comment vont les joueurs de Rugby ? ca va ?
+Réponse:
+Les règles du rugby prévoient que chaque équipe doit compter 15 joueurs minimum. Un match de rugby senior dure 2 fois 40 minutes. Les joueurs peuvent courir en portant le ballon, lancer ou botter le ballon, donner le ballon à un autre joueur, plaqué, tenir ou pousser un adversaire porteur du ballon, tomber sur le ballon, prendre part à une mêlée ordonnée, une mêlée spontanée (ruck), un maul ou un alignement, ou faire un touché à terre dans un en-but. Les joueurs doivent respecter les règles du jeu tout au long du match. Ils peuvent effectuer des actions telles que lancer le ballon à un coéquipier lorsqu'ils sont en jeu, ou effectuer un
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 21/05, 14:55:06 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 173.15111
+Question posée : Quelle huile de friture pour les frites ?
+Réponse apportée : 
+Voici des extraits de documents jugés pertinents pour répondre à la question ci-dessous. Reformule ta réponse de manière claire.
+Extraits : 
+['d’être préservés du froid. Nous présentons ci -dessous un bref aperçu des aliments les plus fréquemment rencontrés.', "Avoir des pattes d'___. Être le ______ de la farce. Monter sur ses grands _______. 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12.", 'du sel en vrac. Les vaches laitières régulent en effet la plupart du temps leur consomm ation', 'dans un second temps, les corrections à apporter afin qu’elle soit mieux équilibrée, et ce en']
+
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus, en la reformulant pour être compréhensible.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Quelle huile de friture pour les frites ?
+Réponse:
+Les documents ne fournissent aucune information pertinente sur le sujet de l'huile de friture pour les frites. Ils mentionnent des aliments et des expressions figurées, mais aucune mention d'huile de friture.
+===================================================================
+

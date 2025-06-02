@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>DOCia - Bienvenue</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 7rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 20px 0 40px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    .button {
+      position: relative;
+      padding: 15px 30px;
+      border: 2px solid #fff;
+      border-radius: 25px;
+      background: transparent;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .button::before,
+    .button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+    }
+
+    .left::before {
+      content: '←';
+      left: -25px;
+    }
+
+    .right::after {
+      content: '→';
+      right: -25px;
+    }
+
+    .down::after {
+      content: '↓';
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .auto-mail-button {
+      position: relative;
+      margin-top: 20px;
+    }
+
+    .dots {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      display: flex;
+      gap: 0;
+    }
+
+    .dot {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      margin-left: -15px;
+      opacity: 0.9;
+      transition: background-color 1s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dots">
+    <div class="dot" id="dot1"></div>
+    <div class="dot" id="dot2"></div>
+    <div class="dot" id="dot3"></div>
+    <div class="dot" id="dot4"></div>
+  </div>
+
+  <h1>DOCia.</h1>
+  <h2>Bienvenue</h2>
+
+  <div class="buttons">
+    <button class="button left" onclick="goTo('resume.html')">Résumer</button>
+    <button class="button right" onclick="goTo('questions.html')">Questions</button>
+  </div>
+
+  <div class="auto-mail-button">
+    <button class="button down" onclick="goTo('mailollama.html')">auto-Mail</button>
+  </div>
+
+  <script>
+    const colorsCycle = [
+      ["#0d0f10", "#4c6673", "#1c24c4", "#9ed4ec"],
+      ["#4c6673", "#1c24c4", "#9ed4ec", "#0d0f10"],
+      ["#1c24c4", "#9ed4ec", "#0d0f10", "#4c6673"],
+      ["#9ed4ec", "#0d0f10", "#4c6673", "#1c24c4"]
+    ];
+    let colorIndex = 0;
+
+    function updateDots() {
+      const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3'), document.getElementById('dot4')];
+      dots.forEach((dot, i) => {
+        dot.style.backgroundColor = colorsCycle[colorIndex][i];
+      });
+      colorIndex = (colorIndex + 1) % colorsCycle.length;
+    }
+
+    setInterval(updateDots, 1000);
+    updateDots();
+
+    function goTo(page) {
+      window.location.href = page;
+    }
+
+    // Swipe gestures
+    let startX = 0;
+    let startY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      let endX = e.changedTouches[0].clientX;
+      let endY = e.changedTouches[0].clientY;
+      let deltaX = endX - startX;
+      let deltaY = endY - startY;
+
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX > 50) goTo("resume.html");
+        else if (deltaX < -50) goTo("questions.html");
+      } else {
+        if (deltaY > 50) goTo("mail2.html");
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+-------------------------------------------------------------------
+Test du : 14/05, 11:17:55 avec modèle : Qwen/Qwen1.5-1.8B-Chat
+-------------------------------------------------------------------
+Temps d'éxecution : 149.33789
+Question posée : Comment traduit-on "Singe" en Espagnol ?
+Réponse apportée : 
+    Répond à la question :Comment traduit-on "Singe" en Espagnol ? Dans cette réponse, expliquerz les étapes nécessaires pour traduire cette phrase en espagnol et fournir une explication détaillée de chaque étape.
+    Exemple : "Singe" -> "Un"
+    Étape 1: Identifier le mot "singe" dans la phrase originale en anglais. En anglais, "singe" est un verbe qui signifie "to form a single part of". Il est utilisé dans des phrases telles que "The ring is made of gold and silver", "She sings beautifully", ou "He has a single tooth".
+    Étape 2: Trouver l'orthographe appropriée du mot "singe" en espagnol. En espagnol, "singe" se prononce généralement comme "un". Cela signifie qu'il doit être transliter directement de l'anglais vers l'espagnol.
+    Étape 3: Traduire le verbe "to form a single part of" en espagnol. En espagnol, cela signifie "formar parte única de". Cette expression peut être traduite directement en espagnol en utilisant la forme "un" pour "a single part" et la forme "de" pour "of".
+    Étape 4: Traduire la phrase complète en espagnol. La phrase originale en anglais est : "The ring is made of gold and silver." En espagnol, cela devient : "El anillo está hecho de oro y plata."
+    Explication détaillée de chaque étape :
+- Étape 1: Identifier le mot "singe" : "singe" est un verbe qui signifie "to form a single part of". Il est utilisé dans des phrases telles que "The ring is made of gold and silver", "She sings beautifully", ou "He has a single tooth".
+- Étape 2: Trouver l'orthographe appropriée du mot "singe" en espagnol : En espagnol, "singe" se prononce généralement comme "un". Cela signifie qu'il doit être transliter directement de l'anglais vers l'espagnol.
+- Étape 3: Traduire le verbe "to form a single part of" en espagnol : En espagnol,
+⚠️ CETTE REPONSE A ETE FOURNI SANS DOCUMENT ANNEXE, ELLE EST DONC GENERALE ⚠️
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 14/05, 11:20:28 avec modèle : Qwen/Qwen1.5-1.8B-Chat
+-------------------------------------------------------------------
+Temps d'éxecution : 2.10612
+Question posée : Comment traduit-on "Singe" en espagnol ?
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 14/05, 11:24:52 avec modèle : Qwen/Qwen1.5-1.8B-Chat
+-------------------------------------------------------------------
+Temps d'éxecution : 58.6411
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre.
+Document fournis : ["Les règle du rugby\nLa durée:la durée d'un match de rugby est de 2x 40minutes pour les  \nséniors. \nles   règles:  il doit y avoir 15 joueurs obligatoirement dans une équipe de \nrugby.\nUn match commence par un coup d’envoi.\nAprès le coup d’envoi, tout ", 'saire.\nToute action d’un joueur doit être faite dans le respect des Règles du Jeu.\nUn joueur et obliger de passer la balle en arrière\n \nUn terrain de rugby:\n', 'este technique.\n• Touch  e:  il faut lancer le ballons a la quand on et en touche.\nVOICI QUELQUE PHOTO DE BALLONS DE RUGBY:\n']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Combien de joueurs faut-il pour un match de rugby ?
+Réponse :
+
+Pour un match de rugby, il doit y avoir 15 joueurs obligatoirement dans une équipe de rugby. Cela inclut tous les joueurs de chaque ligne (saisisseurs, défenseurs, marquiers, pêchiers, entraîneurs, etc.) et les entraîneurs qui sont responsables de la formation et de la gestion des joueurs. Les joueurs peuvent également être invités à participer à un match en tant que non-joueurs, mais ils doivent toujours être inclus dans l'équipe principal. Il est important de noter que les règles du rugby définissent également les limites de nombre de joueurs maximum pour chaque équipe et le nombre de matchs organisés par l'organisation. En général, les équipes de rugby ont généralement entre 20 et 30 joueurs pour un match de rugby senior.不断地尝试和失败是成功的必经
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 14/05, 11:55:00 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 1278.06675
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre.
+Document fournis : ["Les règle du rugby\nLa durée:la durée d'un match de rugby est de 2x 40minutes pour les  \nséniors. \nles   règles:  il doit y avoir 15 joueurs obligatoirement dans une équipe de \nrugby.\nUn match commence par un coup d’envoi.\nAprès le coup d’envoi, tout ", 'saire.\nToute action d’un joueur doit être faite dans le respect des Règles du Jeu.\nUn joueur et obliger de passer la balle en arrière\n \nUn terrain de rugby:\n', 'este technique.\n• Touch  e:  il faut lancer le ballons a la quand on et en touche.\nVOICI QUELQUE PHOTO DE BALLONS DE RUGBY:\n']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Combien de joueurs faut-il pour un match de rugby ?
+
+Réponse :
+Il faut 15 joueurs dans une équipe de rugby.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 14/05, 13:44:37 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 321.61046
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre.
+Document fournis : ["Les règle du rugby\nLa durée:la durée d'un match de rugby est de 2x 40minutes pour les  \nséniors. \nles   règles:  il doit y avoir 15 joueurs obligatoirement dans une équipe de \nrugby.\nUn match commence par un coup d’envoi.\nAprès le coup d’envoi, tout ", 'saire.\nToute action d’un joueur doit être faite dans le respect des Règles du Jeu.\nUn joueur et obliger de passer la balle en arrière\n \nUn terrain de rugby:\n', 'este technique.\n• Touch  e:  il faut lancer le ballons a la quand on et en touche.\nVOICI QUELQUE PHOTO DE BALLONS DE RUGBY:\n']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Combien de joueurs faut-il pour un match de rugby ?
+
+Réponse :
+Il faut 15 joueurs dans une équipe de rugby.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 14/05, 13:51:41 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 34.04488
+Question posée : As-tu des informations sur la guerre en Algérie ?
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 14/05, 14:07:30 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 788.20618
+Question posée : As-tu des informations sur la guerre en Algérie ?
+Réponse apportée : 
+    Répond à la question :As-tu des informations sur la guerre en Algérie ?
+
+Oui, j'ai des informations sur la guerre en Algérie, qui a duré de 1954 à 1962. C'était un conflit armé entre le Front de libération nationale (FLN) algérien et les forces françaises pour l'indépendance de l'Algérie. Le conflit a entraîné la mort de centaines de milliers de personnes et a conduit à l'obtention de l'indépendance de l'Algérie.
+
+Le conflit a commencé en novembre 1954 avec des attaques coordonnées contre des installations militaires, des postes de police et des installations économiques françaises. Les insurgés ont utilisé des tactiques de guérilla et des attentats terroristes contre les civils européens. Les forces françaises ont répondu avec une campagne militaire massive et une politique d'assimilation forcée.
+
+La guerre a été marquée par des événements notables tels que la bataille d'Alger en 1956, la bataille de Djebel Amour en 1957 et la bataille d'Algiers en 1958. Les événements ont culminé avec la signature des accords d'Évian en mars 1962, qui ont mis fin à la guerre et ont conduit à l'indépendance de l'Algérie.
+
+Si vous avez des questions plus spécifiques sur la guerre en Algérie, je serais heureux de vous les répondre.
+⚠️ CETTE REPONSE A ETE FOURNI SANS DOCUMENT ANNEXE, ELLE EST DONC GENERALE ⚠️
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 15/05, 09:28:48 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 220.20516
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 
+    Répond à la question :Combien de joueurs faut-il pour un match de rugby ?
+
+Il y a deux versions de rugby : le rugby à XIII et le rugby à XV.
+
+Pour un match de rugby à XIII, il faut 13 joueurs par équipe. Donc au total, il faut 26 joueurs pour un match.
+
+Pour un match de rugby à XV, il faut 15 joueurs par équipe. Donc au total, il faut 30 joueurs pour un match.
+
+Ainsi, le nombre de joueurs nécessaires pour un match de rugby dépend de la version du jeu que l'on pratique.
+⚠️ CETTE REPONSE A ETE FOURNI SANS DOCUMENT ANNEXE, ELLE EST DONC GENERALE ⚠️
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 15/05, 09:35:15 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 252.59184
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre.
+Document fournis : ["Les règle du rugby\nLa durée:la durée d'un match de rugby est de 2x 40minutes pour les  \nséniors. \nles   règles:  il doit y avoir 15 joueurs obligatoirement dans une équipe de \nrugby.\nUn match commence par un coup d’envoi.\nAprès le coup d’envoi, tout ", 'saire.\nToute action d’un joueur doit être faite dans le respect des Règles du Jeu.\nUn joueur et obliger de passer la balle en arrière\n \nUn terrain de rugby:\n', 'este technique.\n• Touch  e:  il faut lancer le ballons a la quand on et en touche.\nVOICI QUELQUE PHOTO DE BALLONS DE RUGBY:\n']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Combien de joueurs faut-il pour un match de rugby ?
+
+Réponse :
+Il faut 15 joueurs dans une équipe de rugby.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 15/05, 09:57:50 avec modèle : mistralai/Mistral-7B-Instruct-v0.2
+-------------------------------------------------------------------
+Temps d'éxecution : 102.24089
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 
+Contexte : Voici une liste d'extraits de document de référence, sélectionnés comme étant les plus pertinents selon la question. Utilise uniquement ces passages pour répondre.
+Document fournis : ["Les règle du rugby\nLa durée:la durée d'un match de rugby est de 2x 40minutes pour les  \nséniors. \nles   règles:  il doit y avoir 15 joueurs obligatoirement dans une équipe de \nrugby.\nUn match commence par un coup d’envoi.\nAprès le coup d’envoi, tout ", 'saire.\nToute action d’un joueur doit être faite dans le respect des Règles du Jeu.\nUn joueur et obliger de passer la balle en arrière\n \nUn terrain de rugby:\n', 'este technique.\n• Touch  e:  il faut lancer le ballons a la quand on et en touche.\nVOICI QUELQUE PHOTO DE BALLONS DE RUGBY:\n']
+
+Consignes : 
+
+- Ne génère ta réponse qu'en te basant strictement sur le contenu des documents ci-dessus.
+- Si les documents ne permettent pas de répondre clairement à la question, dis simplement : 
+"Je ne peux pas répondre à cette question avec les documents fournis."
+Question :
+Combien de joueurs faut-il pour un match de rugby ?
+
+Réponse :
+Il faut 15 joueurs dans une équipe de rugby.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 15/05, 12:11:07 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 72.16641
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 15 joueurs
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 09:12:38 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 1.94065
+Question posée : Combien de joueurs faut-il pour un match de rugby ?
+Réponse apportée : 15 joueurs
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 09:17:08 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 0.84658
+Question posée : Quel est l'importance du sport en France ?
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 09:19:24 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 8.21025
+Question posée : Dans les matchs de rugby, combien de joueurs faut-il pour agresser un autre joueur ?
+Réponse apportée :                                                                                                    
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 09:20:33 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 3.12944
+Question posée : Lors du match de rugby, faut-il se droguer ?
+Réponse apportée : - Si les documents ne permettent pas de répondre clairement à la question, dis simplement : "Je ne pouve pas répondre à cette question avec les documents fournis."
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 09:26:08 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 5.94241
+Question posée : la durée d'un match de rugby permet-il de devenir accro à la drogue ?
+Réponse apportée : La durée d'un match de rugby est de 2x 40minutes pour les nséniors. nles règles: il doit y avoir 15 joueurs obligatoirement dans une équipe de rugby.nUn match commence par un coup d'envoi.nAprès le coup d'envoi, tout ", 'sare.nToute action d'un joueur doit être faite dans le respect des Règles du Jeux.nUn joueur et obliger de passer la balle en arrièrenUn terrain de rugby:n']
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 09:26:47 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 1.37545
+Question posée : Quelle est la durée d'un match de rugby ?
+Réponse apportée : 2x 40minutes
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 10:59:26 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 0.76763
+Question posée : Comment vas-tu ?
+Réponse apportée : Désolé, les fichiers ne permettent pas de répondre à vos questions.
+===================================================================
+
+-------------------------------------------------------------------
+Test du : 16/05, 11:00:42 avec modèle : google/flan-t5-base
+-------------------------------------------------------------------
+Temps d'éxecution : 8.02853
+Question posée : Pendant un match de rugby, comment vas-tu ?
+Réponse apportée :                                                                                                    
+===================================================================
+
