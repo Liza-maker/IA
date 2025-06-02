@@ -40,7 +40,7 @@ def generate_summary(prompt):
     result = response.json()
     return result.get("response", "").strip()
 
-def readPdf(list_file):
+def readPdfOLD(list_file):
     """
     Fonction qui transforme des pdf en texte :
 
@@ -60,6 +60,37 @@ def readPdf(list_file):
             list_texts.append(text)
     return list_texts
 #document = readPdf(["pdf-exemple.pdf","sample.pdf","rugby.pdf","mes-fiches-animaux-de-la-ferme.pdf","vaches.pdf"])
+import pdfplumber
+
+import pdfplumber
+
+def readPdf(list_file):
+    """
+    Fonction qui transforme des pdf en texte (avec gestion des tableaux) :
+
+    Args:
+        list_file (list): liste des fichiers
+
+    Returns:
+        text : contenu du fichier
+    """
+    list_texts = []
+    for file in list_file:
+        with pdfplumber.open(file) as pdf:
+            for page in pdf.pages:
+                text = page.extract_text() or ""
+                tables = page.extract_tables()
+                for table in tables:
+                    table_text = '\n'.join([
+                        ' | '.join(cell if cell is not None else '' for cell in row)
+                        for row in table if row
+                    ])
+                    text += "\n\nTABLE:\n" + table_text
+                list_texts.append(text)
+    return list_texts
+
+
+
 
 def chuncking_doc(file):
     """Fonction qui créé des chunks sur le texte
@@ -72,9 +103,11 @@ def chuncking_doc(file):
     """
     #Fait une découpe plus intelligente que ma fonction grâce à chunk_overlap qui va essayer de trouver une phrase avant la découpe.
     docs = [Document(page_content=page_text) for page_text in file]
+    
     splitter = RecursiveCharacterTextSplitter(chunk_size = 400, chunk_overlap=75,separators=["\n\n","\n",".","!","?"])
     splits_docs = splitter.split_documents(docs)
     chunks = [doc.page_content for doc in splits_docs]
+    print(f"Chunks départ : {chunks}")
     #On enlève tous les sauts de ligne
     def clean_chunk(text):
         return ' '.join(text.replace('\n', ' ').split())
@@ -94,7 +127,6 @@ def embedding_texts(chunks,user_text):
     """
     print("Chunks : ",chunks)
     if len(chunks) > 0:
-        
         #On embedding (transférer les phrases par des vecteurs) (documents puis question utilisateur)
         modelEmbedding = SentenceTransformer("all-MiniLM-L6-v2")
         embedding = modelEmbedding.encode(chunks, show_progress_bar=True, convert_to_numpy=True)
@@ -109,7 +141,8 @@ def embedding_texts(chunks,user_text):
         for i, idx in enumerate(indices[0]):
             output_text.append(chunks[idx])
         return output_text
-    return False
+    else:
+        return False
 
 def predict_with_ollama(context, question, model_name="llama3.1"):
     """Fonction qui génère le résultat du modèle
@@ -205,4 +238,4 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
