@@ -6,6 +6,7 @@
   <title>DOCia - Résumé</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    /* Ton CSS existant inchangé */
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -22,7 +23,7 @@
 
     .circle-arrow {
       position: absolute;
-      top: 30px;
+      top: 70px;
       right: 40px;
       width: 48px;
       height: 48px;
@@ -143,6 +144,7 @@
       flex-grow: 1;
       font-size: 0.95rem;
       color: #333;
+      white-space: pre-wrap;
     }
 
     .summary-column button {
@@ -153,6 +155,18 @@
       background: #fff;
       cursor: pointer;
       font-weight: 500;
+    }
+
+    #pdf-preview-container {
+      display: none;
+      margin-top: 20px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      margin-top: 10px;
     }
 
     @media (max-width: 1000px) {
@@ -176,17 +190,14 @@
 
   <div class="container">
     <div class="upload-column">
-      <img src="{{ url_for('static', filename='images/Upload-Icon.png') }}" alt="Upload Icon">
+      <img src="../static/images/Upload-Icon.png" alt="Upload Icon">
       <p>Déposer votre fichier (pdf) ici</p>
       <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".pdf" required>
+        <input type="file" name="files" accept=".pdf" multiple required>
         <input type="hidden" name="platform" id="platform-input">
       </form>
 
-      <!-- Nouveau champ prompt personnalisé -->
-      <textarea id="customPrompt" placeholder="Ajoutez une consigne (ex: MAX a gagné ce match)..." rows="3"></textarea>
-
-      <!-- Nouveau filtre de style -->
+      <textarea id="customPrompt" placeholder="Ajoutez une consigne (ex: Rédigez un résumé au ton journalistique pour un article de presse)..." rows="3"></textarea>
       <select id="styleFilter">
         <option value="">Style de résumé (optionnel)</option>
         <option value="drôle">Résumé drôle</option>
@@ -196,7 +207,7 @@
 
       <div class="socials">
         <button type="button" onclick="submitWithPlatform(this, 'Instagram')">Instagram</button>
-        <button type="button" onclick="submitWithPlatform(this, 'Site web')">Site web</button>
+        <button type="button" onclick="submitWithPlatform(this, 'Linkedin')">LinkedIn</button>
         <button type="button" onclick="submitWithPlatform(this, 'Facebook')">Facebook</button>
         <button type="button" onclick="submitWithPlatform(this, 'Presse')">Presse</button>
       </div>
@@ -206,6 +217,14 @@
       <h3>Génération du résumé...</h3>
       <p id="summary-text">En attente du fichier...</p>
       <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
+
+      <!-- Bloc PDF preview -->
+      <div id="pdf-preview-container">
+        <h4>Aperçu du PDF généré :</h4>
+        <iframe id="pdf-preview"></iframe>
+        <button id="download-pdf-btn">Télécharger le PDF</button>
+      </div>
+
       <button onclick="location.reload()">Réessayez</button>
     </div>
   </div>
@@ -236,6 +255,9 @@ async function submitWithPlatform(buttonElement, platform) {
   const customPrompt = document.getElementById("customPrompt").value;
   const styleFilter = document.getElementById("styleFilter").value;
   const timerElement = document.getElementById("timer");
+  const pdfPreviewContainer = document.getElementById("pdf-preview-container");
+  const pdfPreview = document.getElementById("pdf-preview");
+  const downloadBtn = document.getElementById("download-pdf-btn");
 
   if (!fileInput.files.length) {
     alert("Veuillez d'abord choisir un fichier PDF.");
@@ -253,6 +275,8 @@ async function submitWithPlatform(buttonElement, platform) {
   formData.append("style_filter", styleFilter);
 
   summaryText.innerText = "⏳ Génération du résumé en cours...";
+  pdfPreviewContainer.style.display = "none";
+  pdfPreview.src = "";
   startTimer();
 
   try {
@@ -266,6 +290,30 @@ async function submitWithPlatform(buttonElement, platform) {
       summaryText.innerText = data.summary;
       stopTimer();
       timerElement.innerText += `  (Durée serveur : ${data.duration}s)`;
+
+      if (platform === "Presse") {
+        // Génération du PDF
+        const pdfResponse = await fetch("http://127.0.0.1:5000/generate_pdf", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ content: data.summary })
+        });
+
+        if (pdfResponse.ok) {
+          const blob = await pdfResponse.blob();
+          const pdfUrl = URL.createObjectURL(blob);
+          pdfPreview.src = pdfUrl;
+          pdfPreviewContainer.style.display = "block";
+
+          downloadBtn.onclick = () => {
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = "communique_presse.pdf";
+            a.click();
+            URL.revokeObjectURL(pdfUrl);
+          };
+        }
+      }
     } else {
       summaryText.innerText = "❌ Erreur lors de la génération.";
       stopTimer();
@@ -276,7 +324,6 @@ async function submitWithPlatform(buttonElement, platform) {
   }
 }
 </script>
-
 
 </body>
 </html>

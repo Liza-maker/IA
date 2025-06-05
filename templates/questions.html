@@ -22,7 +22,7 @@
 
     .circle-arrow {
       position: absolute;
-      top: 30px;
+      top: 70px;
       right: 40px;
       width: 48px;
       height: 48px;
@@ -171,7 +171,7 @@
 
       <!-- Le formulaire n'est plus soumis automatiquement -->
       <form id="upload-form" enctype="multipart/form-data" onsubmit="submitWithPlatform(); return false;">
-        <input type="file" name="file" accept=".pdf" required>
+        <input type="file" name="file[]" accept=".pdf" multiple required>
         <div class="footer">
           <div class="footer-input-wrapper">
             <input type="text" name="question" placeholder="Pose ta question ici..." required>
