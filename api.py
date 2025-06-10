@@ -19,6 +19,18 @@ from PIL import Image
 import easyocr
 reader = easyocr.Reader(['fr'])
 
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable
+from reportlab.lib import colors
+from reportlab.lib.units import cm
+import os
+
+pdfmetrics.registerFont(TTFont('Anton', 'static/Anton-Regular.ttf'))
+
+
 print("Début du programme...")
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5000", "http://localhost:5001"]}})
@@ -160,57 +172,128 @@ def predict_with_ollama(context, question, model_name="llama3.1"):
     result = ollama.generate(model=model_name, prompt=prompt)
     return result["response"]
 
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Flowable, Paragraph, Spacer
+from reportlab.lib.units import cm
+from reportlab.lib.enums import TA_JUSTIFY
+import os
+
+class HeaderWithBackground(Flowable):
+    def __init__(self, logo_path=None, title_text="Communiqué de presse"):
+        Flowable.__init__(self)
+        self.logo_path = logo_path
+        self.title_text = title_text
+        self.height = 3.5 * cm
+        self.page_width = A4[0]
+
+    def draw(self):
+        c = self.canv
+        x = 0
+        y = 0
+
+        logo_size = 3 * cm
+        offset_x = 0
+
+        logo_bg_width = logo_size + 1 * cm
+        c.setFillColor(colors.HexColor("#f2f2f2"))
+        c.rect(x, y, logo_bg_width, self.height, stroke=0, fill=1)
+
+        if self.logo_path and os.path.exists(self.logo_path):
+            c.drawImage(
+                self.logo_path,
+                x + 0.5 * cm, y + (self.height - logo_size) / 2,
+                width=logo_size, height=logo_size,
+                preserveAspectRatio=True, mask='auto'
+            )
+        offset_x = logo_bg_width
+
+        rect_width = self.page_width - offset_x
+        c.setFillColor(colors.HexColor("#ec2423"))
+        c.rect(offset_x, y, rect_width, self.height, stroke=0, fill=1)
+
+        c.setFillColor(colors.white)
+        c.setFont("Anton", 35)
+        text_x = offset_x + 1 * cm
+        text_y = y + self.height / 2 - 10
+        c.drawString(text_x, text_y, self.title_text)
+
+class FooterGraphics(Flowable):
+    def __init__(self):
+        Flowable.__init__(self)
+        self.page_width, self.page_height = A4
+
+    def draw(self):
+        c = self.canv
+        x_right = self.page_width
+        y_bottom = 0
+
+        # Rectangle bleu
+        c.setFillColor(colors.HexColor("#1d0e77"))
+        c.saveState()
+        c.translate(x_right - 5*cm, y_bottom)
+        c.rotate(-45)
+        c.rect(0, 0, 2*cm, 8*cm, stroke=0, fill=1)
+        c.restoreState()
+
+        # Rectangle rouge — on le place plus à droite et plus haut
+        c.setFillColor(colors.HexColor("#ec2423"))
+        c.saveState()
+        c.translate(x_right - 4*cm, y_bottom + 4*cm)
+        c.rotate(-45)
+        c.rect(0, 0, 1*cm, 3*cm, stroke=0, fill=1)
+        c.restoreState()
+
+def draw_footer(canvas, doc):
+    footer = FooterGraphics()
+    footer.canv = canvas
+    canvas.saveState()
+    canvas.translate(0, 0)
+    footer.draw()
+    canvas.restoreState()
+
 def generate_pdf(content, output_path):
+    doc = BaseDocTemplate(
+        output_path,
+        pagesize=A4,
+        rightMargin=1.5*cm, leftMargin=1.5*cm,
+        topMargin=0*cm, bottomMargin=2*cm
+    )
 
-    c = canvas.Canvas(output_path, pagesize=A4)
-    width, height = A4
+    frame = Frame(doc.leftMargin, doc.bottomMargin, 
+                  doc.width, doc.height, id='normal')
+    template = PageTemplate(id='with_footer', frames=frame, onPage=draw_footer)
+    doc.addPageTemplates([template])
 
-    # Couleurs ASBH
-    rouge_asbh = colors.HexColor("#ec2423")
-    violet_asbh = colors.HexColor("#1d0e77")
+    styles = getSampleStyleSheet()
+    normal_style = ParagraphStyle(
+        'NormalStyle',
+        parent=styles['Normal'],
+        fontName='Helvetica',
+        fontSize=13,
+        leading=14,
+        spaceAfter=9,
+        alignment=TA_JUSTIFY  # Plus d'espace entre paragraphes
+    )
+
+    elements = []
+
     logo_path = "static/images/logo_asbh.png"
+    elements.append(HeaderWithBackground(logo_path))
+    elements.append(Spacer(1, 40))  # Plus d'espace après le header
 
-    # --- Logo ---
-    if os.path.exists(logo_path):
-        c.drawImage(logo_path, 40, height - 100, width=80, preserveAspectRatio=True, mask='auto')
-
-    # --- Titre Principal sur fond rouge ---
-    rect_x = 150
-    rect_y = height #-30
-    rect_width = 450
-    rect_height = 100
-
-    c.setFillColor(rouge_asbh)
-    c.roundRect(rect_x, rect_y, rect_width, rect_height, 5, stroke=0, fill=1)
-
-    c.setFillColor(colors.white)
-    c.setFont("Helvetica-Bold", 30)
-    c.drawString(rect_x + 10, rect_y + 10, "Communiqué de Presse")
-
-    # --- Corps du texte ---
-    c.setFillColor(colors.black)
-    c.setFont("Helvetica", 12)
-    left_margin = 50
-    right_margin = 50
-    top_margin = rect_y - 50
-    line_height = 16
-
-    # Découpe du texte en paragraphes
-    paragraphs = content.split("\n\n")
-    y_position = top_margin
-
+    paragraphs = content.strip().split('\n\n')
     for para in paragraphs:
-        lines = para.strip().split("\n")
-        for line in lines:
-            c.drawString(left_margin, y_position, line.strip())
-            y_position -= line_height
-            if y_position < 50:
-                c.showPage()
-                y_position = height - 50
-                c.setFont("Helvetica", 12)
-        y_position -= 8  # Espace entre paragraphes
+        para = para.strip().replace('\n', ' ')
+        elements.append(Paragraph(para, normal_style))
+        elements.append(Spacer(1, 12))
 
-    c.save()
+    doc.build(elements)
+
+# Exemple d'utilisation
+# generate_pdf("Ton texte ici", "output.pdf")
+
 
 
 #=================================================================
@@ -242,12 +325,12 @@ def upload():
     extra_prompt = request.form.get('custom_prompt', '').strip()
 
     base_prompts = {
-        "Instagram": "Crée un résumé percutant pour une post Instagram, en français. Utilise des émojis 🔴🔵✨, des phrases courtes et visuelles. Le texte doit être prêt à être publié. Maximum 80 mots.",
+        "Instagram": "Crée un résumé percutant pour une post Instagram, en français. Utilise des émojis 🔴🔵✨, des phrases courtes et visuelles. Le texte doit être prêt à être publié. Maximum 80 mots. Termine un post avec les hashtags. ",
         "Facebook": "Crée un résumé informatif et engageant pour une publication Facebook, en français. Ne rédige aucun commentaire ou note explicative. Le texte doit être prêt à être copié-collé tel quel. Maximum 200 mots. Ne génère qu’un seul résumé unique.",
         "Linkedin": "Fais un résumé très court et professionnel (moins de 280 caractères) pour un post de Linkedin.",
         "Site web": "Crée un résumé clair, professionnel et structuré pour un site web.",
-        "Presse": "Rédige un communiqué de presse complet et structuré en français, prêt à être publié. Utilise un ton professionnel et dynamique. Mets en avant l’événement, les détails clés (date, lieu, organisateurs, contexte historique). "
-        "Structure le texte avec des paragraphes. Attention : Rédige le texte de façon fluide et naturelle, évite les astérisques et les puces inutiles. Ne génère qu’un seul communiqué de presse de demi page A4 et unique.",
+        "Presse": "Rédige un communiqué de presse complet et structuré en français, prêt à être publié. Utilise un ton professionnel et dynamique. Mets en avant l’événement et les détails clés. "
+        "Rédige le texte sous forme fluide et naturelle, divisé en paragraphes, sans titre et sans notes entre crochets ou éléments à compléter. Le texte doit avoir une longueur équivalente à une demi-page A4 et être unique. ",
         "générique": "Fais un résumé court et clair de ce document PDF."
     }
 
@@ -330,4 +413,4 @@ def generate_pdf_route():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
