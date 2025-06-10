@@ -24,11 +24,29 @@
 
     <div class="summary-column">
       <h3 id="mailResult">Génération du message ici</h3>
+      <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
       <button onclick="location.reload()">Réessayez</button>
     </div>
   </div>
 
   <script>
+    let timerInterval;
+    let seconds = 0;
+
+function startTimer() {
+  const timer = document.getElementById("timer");
+  seconds = 0;
+  timer.innerText = "⏱ Temps écoulé : 0 s";
+
+  timerInterval = setInterval(() => {
+    seconds++;
+    timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
     async function envoyerPrompt() {
       const input = document.getElementById('promptInput');
       const output = document.getElementById('mailResult');
@@ -40,7 +58,8 @@
         return;
       }
 
-      output.textContent = "Génération en cours...";
+      output.textContent = "⏳ Génération du résumé en cours...";
+      startTimer();
 
       try {
         const response = await fetch('http://localhost:11434/api/generate', {
@@ -52,9 +71,9 @@
             stream: false
           })
         });
-
         const data = await response.json();
         output.textContent = data.response || "Aucune réponse obtenue.";
+        stopTimer();
       } catch (error) {
         output.textContent = "Erreur lors de la génération du mail.";
         console.error(error);

@@ -178,7 +178,6 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Flowable, Paragraph, Spacer
 from reportlab.lib.units import cm
 from reportlab.lib.enums import TA_JUSTIFY
-import os
 
 class HeaderWithBackground(Flowable):
     def __init__(self, logo_path=None, title_text="Communiqué de presse"):

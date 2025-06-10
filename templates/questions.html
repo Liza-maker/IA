@@ -36,11 +36,31 @@
     <div class="summary-column">
       <h3>Génération du chat...</h3>
       <p id="summary-text">En attente du fichier</p>
+      <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
       <button onclick="location.reload()">Réessayez</button>
     </div>
   </div>
 
 <script>
+let timerInterval;
+let seconds = 0;
+
+function startTimer() {
+  const timer = document.getElementById("timer");
+  seconds = 0;
+  timer.innerText = "⏱ Temps écoulé : 0 s";
+
+  timerInterval = setInterval(() => {
+    seconds++;
+    timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+
 async function submitWithPlatform() {
   const fileInput = document.querySelector('input[type="file"]');
   const summaryText = document.getElementById("summary-text");
@@ -53,7 +73,8 @@ async function submitWithPlatform() {
   const form = document.getElementById("upload-form");
   const formData = new FormData(form);
 
-  summaryText.innerText = "Réponse en cours, veuillez patienter...";
+  summaryText.innerText = "⏳ Génération du résumé en cours...";
+  startTimer();
 
   try {
     const response = await fetch("http://127.0.0.1:5000/questionUtilisateur", {
@@ -64,6 +85,7 @@ async function submitWithPlatform() {
     if (response.ok) {
       const data = await response.json();
       summaryText.innerText = data.summary;
+        stopTimer();
     } else {
       summaryText.innerText = "❌ Erreur lors de la génération.";
     }
