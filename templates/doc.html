@@ -7,8 +7,6 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #000;
-      color: #fff;
       font-family: 'Arial', sans-serif;
       display: flex;
       flex-direction: column;
@@ -16,6 +14,42 @@
       justify-content: center;
       height: 100vh;
       overflow: hidden;
+      transition: background-color 0.5s, color 0.5s;
+      position: relative;
+    }
+
+    body.dark-mode {
+      background-color: #000;
+      color: #fff;
+    }
+
+    body.light-mode {
+      background-color: #fff;
+      color: #000;
+    }
+
+    body.asbh-mode {
+      background: linear-gradient(45deg,  red, blue);
+      color: #fff;
+    }
+
+    body.dell-mode {
+      background: linear-gradient(180deg,  blue, white);
+      color: #fff;
+    }
+
+    /* Ajout du logo ASBH en haut à gauche */
+    .asbh-logo {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 100px;
+      height: auto;
+      display: none;
+    }
+
+    body.asbh-mode .asbh-logo {
+      display: block;
     }
 
     h1 {
@@ -41,10 +75,10 @@
     .button {
       position: relative;
       padding: 15px 30px;
-      border: 2px solid #fff;
+      border: 2px solid currentColor;
       border-radius: 25px;
       background: transparent;
-      color: #fff;
+      color: inherit;
       font-size: 1.2rem;
       font-weight: bold;
       cursor: pointer;
@@ -101,17 +135,49 @@
       border-radius: 50%;
       margin-left: -15px;
       opacity: 0.9;
-      transition: background-color 1s ease;
+      transition: background 1s ease, background-color 1s ease, border-color 1s ease;
+      border: 2px solid #333;
+      background-color: #ccc;
     }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: inherit;
+    }
+
+    .about-link {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 0.9rem;
+  color: #888;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: color 0.3s, opacity 0.3s;
+}
+
+.about-link:hover {
+  color: #555;
+  opacity: 1;
+}
+
+
   </style>
 </head>
-<body>
+<body class="light-mode">
+
+  <!-- Logo ASBH (caché sauf en mode asbh) -->
+  <img src="images/logo_asbh.png" alt="ASBH" class="asbh-logo">
 
   <div class="dots">
-    <div class="dot" id="dot1"></div>
-    <div class="dot" id="dot2"></div>
-    <div class="dot" id="dot3"></div>
-    <div class="dot" id="dot4"></div>
+    <div class="dot" id="lightDot" title="Mode Clair"></div>
+    <div class="dot" id="darkDot" title="Mode Sombre"></div>
+    <div class="dot" id="dotASBH" title="Mode ASBH"></div>
+    <div class="dot" id="dotDELL" title="Mode DELL"></div>
   </div>
 
   <h1>DOCia.</h1>
@@ -126,22 +192,46 @@
     <button class="button down" onclick="goTo('mailollama.html')">auto-Mail</button>
   </div>
 
+  <footer>
+    <span>&copy; 2025 ASBH. Tous droits réservés.</span>
+  </footer>
+  
+  <a href="about.html" class="about-link">À propos</a>
+
+
+
   <script>
     const colorsCycle = [
-      ["#0d0f10", "#4c6673", "#1c24c4", "#9ed4ec"],
-      ["#4c6673", "#1c24c4", "#9ed4ec", "#0d0f10"],
-      ["#1c24c4", "#9ed4ec", "#0d0f10", "#4c6673"],
-      ["#9ed4ec", "#0d0f10", "#4c6673", "#1c24c4"]
-    ];
+  ["#000000", "#FFFFFF", "linear-gradient(45deg, red, blue)", "linear-gradient(180deg, blue, white)"],
+  ["#FFFFFF", "linear-gradient(45deg, red, blue)", "linear-gradient(180deg, blue, white)", "#000000"],
+  ["linear-gradient(45deg, red, blue)", "linear-gradient(180deg, blue, white)", "#000000", "#FFFFFF"],
+  ["linear-gradient(180deg, blue, white)", "#000000", "#FFFFFF", "linear-gradient(45deg, red, blue)"]
+   ];
+
     let colorIndex = 0;
 
     function updateDots() {
-      const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3'), document.getElementById('dot4')];
-      dots.forEach((dot, i) => {
-        dot.style.backgroundColor = colorsCycle[colorIndex][i];
-      });
-      colorIndex = (colorIndex + 1) % colorsCycle.length;
+  const dots = [
+    document.getElementById('lightDot'),
+    document.getElementById('darkDot'),
+    document.getElementById('dotASBH'),
+    document.getElementById('dotDELL')
+  ];
+
+  dots.forEach((dot, i) => {
+    const color = colorsCycle[colorIndex][i];
+    if (color.startsWith("linear-gradient")) {
+      dot.style.background = color;
+      dot.style.backgroundColor = "";
+    } else {
+      dot.style.background = "";
+      dot.style.backgroundColor = color;
     }
+  });
+
+  colorIndex = (colorIndex + 1) % colorsCycle.length;
+}
+
 
     setInterval(updateDots, 1000);
     updateDots();
@@ -149,6 +239,31 @@
     function goTo(page) {
       window.location.href = page;
     }
+
+    const lightDot = document.getElementById('lightDot');
+    const darkDot = document.getElementById('darkDot');
+    const asbhDot = document.getElementById('dotASBH');
+    const dellDot = document.getElementById('dotDELL');
+
+    lightDot.addEventListener('click', () => {
+      document.body.classList.remove('dark-mode', 'asbh-mode', 'dell-mode');
+      document.body.classList.add('light-mode');
+    });
+
+    darkDot.addEventListener('click', () => {
+      document.body.classList.remove('light-mode', 'asbh-mode', 'dell-mode');
+      document.body.classList.add('dark-mode');
+    });
+
+    asbhDot.addEventListener('click', () => {
+      document.body.classList.remove('light-mode', 'dark-mode', 'dell-mode');
+      document.body.classList.add('asbh-mode');
+    });
+
+    dellDot.addEventListener('click', () => {
+      document.body.classList.remove('light-mode', 'dark-mode', 'asbh-mode');
+      document.body.classList.add('dell-mode');
+    });
 
     // Swipe gestures
     let startX = 0;
@@ -169,7 +284,7 @@
         if (deltaX > 50) goTo("resume.html");
         else if (deltaX < -50) goTo("questions.html");
       } else {
-        if (deltaY > 50) goTo("mail2.html");
+        if (deltaY > 50) goTo("mailollama.html");
       }
     });
   </script>
