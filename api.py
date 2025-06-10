@@ -21,12 +21,12 @@ reader = easyocr.Reader(['fr'])
 
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.pagesizes import A4
+
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable
-from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable, PageTemplate, BaseDocTemplate, Frame
 from reportlab.lib.units import cm
-import os
+
+from reportlab.lib.enums import TA_JUSTIFY
 
 pdfmetrics.registerFont(TTFont('Anton', 'static/Anton-Regular.ttf'))
 
@@ -172,12 +172,7 @@ def predict_with_ollama(context, question, model_name="llama3.1"):
     result = ollama.generate(model=model_name, prompt=prompt)
     return result["response"]
 
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Flowable, Paragraph, Spacer
-from reportlab.lib.units import cm
-from reportlab.lib.enums import TA_JUSTIFY
+
 
 class HeaderWithBackground(Flowable):
     def __init__(self, logo_path=None, title_text="Communiqué de presse"):
