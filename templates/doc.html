@@ -61,65 +61,74 @@
     h2 {
       font-size: 3rem;
       font-weight: bold;
-      margin: 20px 0 40px;
+      margin: 20px 0 60px;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      width: 80%;
-      max-width: 600px;
-      margin-bottom: 30px;
-    }
+    .console-layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
 
-    .button {
-      position: relative;
-      padding: 15px 30px;
-      border: 2px solid currentColor;
-      border-radius: 25px;
-      background: transparent;
-      color: inherit;
-      font-size: 1.2rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-    }
+.console-row {
+  display: flex;
+  justify-content: center;
+  gap: 300px;
+}
 
-    .button::before,
-    .button::after {
-      content: '';
-      position: absolute;
-      top: 88%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-    }
+.console-button {
+  position: relative;
+  padding: 15px 30px;
+  border: 2px solid currentColor;
+  border-radius: 25px;
+  background: transparent;
+  color: inherit;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
 
-    .left::before {
-      content: '←';
-      left: -25px;
-      top: 24.2px;
-    }
+.console-button::before,
+.console-button::after {
+  content: '';
+  position: absolute;
+  font-size: 1.5rem;
+}
 
-    .right::after {
-      content: '→';
-      right: -24.2px;
-      top: 25px;
-    }
+.console-up::before {
+  content: '↑';
+  top: -29px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-    .down::after {
-      content: '↓';
-      position: absolute;
-      bottom: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+.console-left::before {
+  content: '←';
+  left: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-    .auto-mail-button {
-      position: relative;
-      margin-top: 20px;
-    }
+.console-right::after {
+  content: '→';
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.console-down::after {
+  content: '↓';
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
 
     .dots {
       position: absolute;
@@ -183,14 +192,17 @@
   <h1>DOCia.</h1>
   <h2>Bienvenue</h2>
 
-  <div class="buttons">
-    <button class="button left" onclick="goTo('resume.html')">Résumer</button>
-    <button class="button right" onclick="goTo('questions.html')">Questions</button>
+  <div class="console-layout">
+  <button class="console-button console-up" onclick="goTo('images.html')">Images</button>
+
+  <div class="console-row">
+    <button class="console-button console-left" onclick="goTo('resume.html')">Résumer</button>
+    <button class="console-button console-right" onclick="goTo('questions.html')">Questions</button>
   </div>
 
-  <div class="auto-mail-button">
-    <button class="button down" onclick="goTo('mailollama.html')">auto-Mail</button>
-  </div>
+  <button class="console-button console-down" onclick="goTo('mailollama.html')">auto-Mail</button>
+</div>
+
 
   <footer>
     <span>&copy; 2025 ASBH. Tous droits réservés.</span>
@@ -285,6 +297,7 @@
         else if (deltaX < -50) goTo("questions.html");
       } else {
         if (deltaY > 50) goTo("mailollama.html");
+        else if (deltaY < -50) goTo("images.html");
       }
     });
   </script>
