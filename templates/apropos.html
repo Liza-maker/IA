@@ -3,81 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <title>À propos de DOCia</title>
-  <style>
-  * {
-  box-sizing: border-box;
-}
+    <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #000;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-  line-height: 1.6;
-}
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.5s, color 0.5s;
+      position: relative;
+    }
 
-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  max-width: 1200px;
-  margin: 250px auto;
-  padding: 0 20px;
-  gap: 40px;
-  position: relative;
-}
+    body.light-mode {
+      background-color: #fff;
+      color: #000;
+    }
 
-main::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: linear-gradient(to bottom, #00ffff, transparent, #00ffff);
-  transform: translateX(-50%);
-  z-index: 0;
-}
+    body.dark-mode {
+      background-color: #000;
+      color: #fff;
+    }
 
-section {
-  width: 50%;
-  background: #111;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-  padding: 30px;
-  position: relative;
-  z-index: 1;
-}
+    body.asbh-mode {
+      background: linear-gradient(45deg, red, blue);
+      color: #fff;
+    }
 
-h1 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-  border-left: 5px solid #00ffff;
-  padding-left: 15px;
-}
-
-p {
-  font-size: 1.1rem;
-  text-align: justify;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 900px) {
-  main {
-    flex-direction: column;
-  }
-
-  main::before {
-    display: none;
-  }
-
-  section {
-    width: 100%;
-  }
-}
-
+    body.dell-mode {
+      background: linear-gradient(180deg, blue, white);
+      color: #000;
+    }
 
     .dots {
       position: absolute;
@@ -85,6 +48,7 @@ p {
       right: 30px;
       display: flex;
       gap: 0;
+      z-index: 2;
     }
 
     .dot {
@@ -93,48 +57,161 @@ p {
       border-radius: 50%;
       margin-left: -15px;
       opacity: 0.9;
-      transition: background-color 1s ease;
+      transition: background 1s ease, background-color 1s ease, border-color 1s ease;
+      border: 2px solid #333;
+      background-color: #ccc;
+      cursor: pointer;
+    }
+
+    main {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      max-width: 1200px;
+      margin: 180px auto 60px;
+      padding: 0 20px;
+      gap: 40px;
+      position: relative;
+    }
+
+    main::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: linear-gradient(to bottom, #00ffff, transparent, #00ffff);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    section {
+      width: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(6px);
+      box-shadow:
+        0 8px 20px rgba(0, 255, 255, 0.2),
+        inset 0 0 10px rgba(255, 255, 255, 0.03),
+        0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.5s ease;
+    }
+
+    section:hover {
+      box-shadow:
+        0 10px 25px rgba(0, 255, 255, 0.4),
+        inset 0 0 15px rgba(255, 255, 255, 0.05),
+        0 6px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      border-left: 5px solid #00ffff;
+      padding-left: 15px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      text-align: justify;
+      margin-bottom: 20px;
+    }
+
+    .about-link {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      padding: 10px 20px;
+      background-color: #00ffff;
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+      z-index: 2;
+    }
+
+    .about-link:hover {
+      background-color: #00cccc;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(0, 255, 255, 0.6);
+    }
+
+    @media (max-width: 900px) {
+      main {
+        flex-direction: column;
+        margin-top: 120px;
+      }
+
+      main::before {
+        display: none;
+      }
+
+      section {
+        width: 100%;
+      }
     }
   </style>
 </head>
-<body>
+<body class="dark-mode">
 
   <div class="dots">
-    <div class="dot" id="dot1"></div>
-    <div class="dot" id="dot2"></div>
-    <div class="dot" id="dot3"></div>
-    <div class="dot" id="dot4"></div>
+    <div class="dot" id="lightDot" title="Mode Clair"></div>
+    <div class="dot" id="darkDot" title="Mode Sombre"></div>
+    <div class="dot" id="dotASBH" title="Mode ASBH"></div>
+    <div class="dot" id="dotDELL" title="Mode DELL"></div>
   </div>
-<main>
-  <section>
-  <h1>À propos de nous</h1>
-  <p>
-    Cette application a été développée par un groupe de trois étudiants en Licence MIASHS (Mathématiques et Informatique Appliquées aux Sciences Humaines et Sociales) de l’Université Paul-Valéry Montpellier 3. Sélectionnés dans le cadre d’un projet collaboratif avec DELL, nous avons eu l’opportunité de concevoir une solution basée sur l’intelligence artificielle, répondant aux besoins spécifiques d’un partenaire de l’entreprise.
-  </p>
-</section>
 
-<section>
-  <h1>Présentation de DOCia</h1>
-  <p>
-    DOCia est une application intelligente de traitement de documents, conçue pour automatiser et optimiser la création de contenus numériques. 
-    DOCia se positionne comme un outil complet, à la croisée du traitement automatique de documents et de la création de contenu assistée par IA, pour répondre aux exigences modernes de la communication numérique.
-  </p>
-</section>
-</main>
+  <main>
+    <section>
+      <h1>À propos de nous</h1>
+      <p>
+        Cette application a été développée par un groupe de trois étudiants en Licence MIASHS (Mathématiques et Informatique Appliquées aux Sciences Humaines et Sociales) de l’Université Paul-Valéry Montpellier 3. Sélectionnés dans le cadre d’un projet collaboratif avec DELL, nous avons eu l’opportunité de concevoir une solution basée sur l’intelligence artificielle, répondant aux besoins spécifiques d’un partenaire de l’entreprise.
+      </p>
+    </section>
+
+    <section>
+      <h1>Présentation de DOCia</h1>
+      <p>
+        DOCia est une application intelligente de traitement de documents, conçue pour automatiser et optimiser la création de contenus numériques. Elle se positionne comme un outil complet, à la croisée du traitement automatique de documents et de la création de contenu assistée par IA, pour répondre aux exigences modernes de la communication numérique.
+      </p>
+    </section>
+  </main>
+
+  <a href="doc.html" class="about-link">← Retour</a>
 
   <script>
     const colorsCycle = [
-      ["#0d0f10", "#4c6673", "#1c24c4", "#9ed4ec"],
-      ["#4c6673", "#1c24c4", "#9ed4ec", "#0d0f10"],
-      ["#1c24c4", "#9ed4ec", "#0d0f10", "#4c6673"],
-      ["#9ed4ec", "#0d0f10", "#4c6673", "#1c24c4"]
+      ["#000000", "#FFFFFF", "linear-gradient(45deg, red, blue)", "linear-gradient(180deg, blue, white)"],
+      ["#FFFFFF", "linear-gradient(45deg, red, blue)", "linear-gradient(180deg, blue, white)", "#000000"],
+      ["linear-gradient(45deg, red, blue)", "linear-gradient(180deg, blue, white)", "#000000", "#FFFFFF"],
+      ["linear-gradient(180deg, blue, white)", "#000000", "#FFFFFF", "linear-gradient(45deg, red, blue)"]
     ];
     let colorIndex = 0;
 
     function updateDots() {
-      const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3'), document.getElementById('dot4')];
+      const dots = [
+        document.getElementById('lightDot'),
+        document.getElementById('darkDot'),
+        document.getElementById('dotASBH'),
+        document.getElementById('dotDELL')
+      ];
       dots.forEach((dot, i) => {
-        dot.style.backgroundColor = colorsCycle[colorIndex][i];
+        const color = colorsCycle[colorIndex][i];
+        if (color.startsWith("linear-gradient")) {
+          dot.style.background = color;
+          dot.style.backgroundColor = "";
+        } else {
+          dot.style.background = "";
+          dot.style.backgroundColor = color;
+        }
       });
       colorIndex = (colorIndex + 1) % colorsCycle.length;
     }
@@ -142,11 +219,21 @@ p {
     setInterval(updateDots, 1000);
     updateDots();
 
-    function goTo(page) {
-      window.location.href = page;
-    }
+    document.getElementById('lightDot').addEventListener('click', () => {
+      document.body.className = 'light-mode';
+    });
 
+    document.getElementById('darkDot').addEventListener('click', () => {
+      document.body.className = 'dark-mode';
+    });
+
+    document.getElementById('dotASBH').addEventListener('click', () => {
+      document.body.className = 'asbh-mode';
+    });
+
+    document.getElementById('dotDELL').addEventListener('click', () => {
+      document.body.className = 'dell-mode';
+    });
   </script>
-
 </body>
 </html>
