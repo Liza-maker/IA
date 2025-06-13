@@ -51,7 +51,7 @@ function stopTimer() {
       const input = document.getElementById('promptInput');
       const output = document.getElementById('mailResult');
       var prompt = input.value.trim();
-      prompt = prompt + "\nRules : Write your answer in french language.\n Answer :";
+      prompt = prompt + "\nRules : Write your answer in french language. And include all jump line in your answer.\n Answer :";
 
       if (!prompt) {
         output.textContent = "Veuillez entrer une demande.";
@@ -72,7 +72,14 @@ function stopTimer() {
           })
         });
         const data = await response.json();
-        output.textContent = data.response || "Aucune réponse obtenue.";
+        let mailContent = data.response || "Aucune réponse obtenue.";
+
+        // Remplacer les sauts de ligne (\n) par des balises <br> pour un meilleur formatage
+        mailContent = mailContent.replace(/\n/g, '<br>');
+        mailContent = mailContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+
+        output.innerHTML = mailContent; // Utilisation de innerHTML pour interpréter les balises <br>
         stopTimer();
       } catch (error) {
         output.textContent = "Erreur lors de la génération du mail.";
