@@ -1,6 +1,15 @@
--> Lancer Lance_scripts.bat
--> Attendre 5 secondes
--> Accéder à http://localhost:5001/doc.html
--> Profiter du site web
+1/ Lancez Windows PowerShell grâce à la barre de recherche Windows et écrivez
+“PowerShell”
 
--> Après fermeture du site web, vous pouvez fermer les fenêtres de python et l'invite de commande ouverte qui se sont ouvertes. 
+2/ Allez dans le répertoire souhaitée afin de télécharger le dossier avec la commande
+suivante : git clone https://github.com/Liza-maker/IA
+A écrire dans votre console PowerShell
+
+3/ Allez dans votre explorateur de fichier et ouvrez là où vous avez effectué le git clone (ici dans Documents\Test)
+
+4/ Lancer Lance_scripts.bat
+5/ Attendre 5 secondes
+6/ Accéder à http://localhost:5001/doc.html
+7/ Profiter du site web
+
+8/ Après fermeture du site web, vous pouvez fermer les fenêtres de python et l'invite de commande ouverte qui se sont ouvertes. 
