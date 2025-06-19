@@ -280,6 +280,73 @@
         width: 90%;
       }
     }
+.results-column {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 100px;
+      padding: 0 40px;
+      flex-wrap: wrap;
+}
 
+.results-box {
+    border: 2px solid #f4f1f1;
+    border-radius: 14px;
+    padding: 25px;
+    background-color: #fafafa;
+    width: 350px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+}
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
 
-    /*Vérifier répétitions summary */ 
+.result-img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: transform 0.3s ease;
+}
+
+.result-img:hover {
+    transform: scale(1.05);
+}
+
+.download-container {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.download-btn {
+    background-color: #555;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+.progress-container {
+    width: 100%;
+    background-color: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 15px;
+    height: 12px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #78f382;
+    transition: width 1s linear;
+}
+.result-img.selectable.selected {
+    border: 3px solid #7f55e3;
+    box-shadow: 0 0 8px #a078f3;
+}

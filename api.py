@@ -1,3 +1,4 @@
+import base64
 from flask import Flask, request, jsonify, send_file
 from werkzeug.utils import secure_filename
 import os
@@ -27,9 +28,126 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable, P
 from reportlab.lib.units import cm
 
 from reportlab.lib.enums import TA_JUSTIFY
+import zipfile
+import tempfile
+import torch
+import shutil
+
+import clip
 
 pdfmetrics.registerFont(TTFont('Anton', 'static/Anton-Regular.ttf'))
 
+
+class RugbyImageClassifier:
+    def __init__(self):
+        print("Chargement du modèle CLIP...")
+        self.device = "cpu"
+        self.model, self.preprocess = clip.load("ViT-L/14@336px", device=self.device)
+        self.themes = {
+            "Spectateurs": [
+                "Supporters en tribune lors d'un match de rugby",
+                "Une foule enthousiaste célébrant un essai",
+                "Des fans de rugby agitant des drapeaux",
+                "des personnes qui sont en train d'encourager l'équipe",
+                "banderole","drapeau","mégaphone", "mascotte", "rire","plusieurs personnes"
+            ],
+            "Plaquages/Actions": [
+                "Joueur plaquant un adversaire au rugby",
+                "Un plaquage intense effectué pendant un match",
+                "Un choc puissant entre deux joueurs de rugby","plus de deux joueurs",
+                "lutte","impact","choc","conflit"
+            ],
+            "Joueur":[
+                "Un seul joueur sur la photo",
+                "Un joueur qui tient un ballon de rugby dans la main",
+                "Photo montrant un joueur sans action","une seule personne avec un ballon"
+            ],
+            "Fair-play": [
+                "Deux joueurs se serrent la main après un match",
+                "Une belle preuve de respect entre adversaires",
+                "Les joueurs échangent des gestes de fair-play",
+                "Respect entre les joueurs",
+                "Respect",
+                "Neutre"
+            ],
+            "Arbitre": [
+                "Arbitre attentif sur le terrain",
+                "Un arbitre sifflant une faute pendant le match",
+                "Un officiel du jeu en action"
+            ],
+            "Encadreur" : [
+                "Une personne avec un chasuble jaune", " pas un joueur", "pas un arbitre", "pas un spectateur",
+                "pas une action ou plaquage", "pas un fair-play", "encadrement", "gérer"
+            ]
+
+            }
+        self.textes = []
+        self.indices = []
+        for theme, descriptions in self.themes.items():
+            self.textes.extend(descriptions)
+            self.indices.extend([theme] * len(descriptions))
+        
+        self.text_inputs = clip.tokenize(self.textes).to(self.device)  
+    def process_uploaded_zip(self, zip_file):
+        """
+        Traite un fichier ZIP uploadé et classifie toutes les images
+        Returns: dict avec les résultats de classification
+        """
+        processed_images = {}
+        # Créer un dossier temporaire
+        temp_images_dir = 'temp_images'
+        os.makedirs(temp_images_dir, exist_ok=True)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+                zip_ref.extractall(temp_dir)
+            for root, dirs, files in os.walk(temp_dir):
+                for file in files:
+                    if file.lower().endswith(('jpg', 'jpeg', 'png', 'bmp', 'gif')):
+                        image_path = os.path.join(root, file)
+                        try:
+                            shutil.copy2(image_path, os.path.join(temp_images_dir, file))
+
+                            image = self.preprocess(Image.open(image_path).convert("RGB")).unsqueeze(0).to(self.device)
+                            with torch.no_grad():
+                                image_features = self.model.encode_image(image)
+                                text_features = self.model.encode_text(self.text_inputs)
+                                similarity = (image_features @ text_features.T).softmax(dim=-1)
+                                theme_scores = {}
+                                for theme in self.themes:
+                                    theme_scores[theme] = max(
+                                        similarity[0, idx].item() 
+                                        for idx, t in enumerate(self.indices) 
+                                        if t == theme
+                                    )                                
+                                best_theme = max(theme_scores, key=theme_scores.get)
+                                best_score = theme_scores[best_theme]                                   
+                                # Stocker les résultats
+                                processed_images[file] = {
+                                    'theme': best_theme,
+                                    'score': best_score,
+                                    'all_scores': theme_scores
+                                }
+                        except Exception as e:
+                            print(f"Erreur lors du traitement de {file}: {e}")
+                        continue
+        return processed_images
+    def get_top_images_for_theme(self, processed_images, selected_theme, top_k=4):
+        """
+        Retourne les K meilleures images pour un thème donné
+        """
+        if selected_theme not in self.themes:
+            return []
+        
+        # Filtrer et trier les images par score pour le thème sélectionné
+        theme_images = [
+            (name, data['all_scores'][selected_theme]) 
+            for name, data in processed_images.items()
+        ]
+        
+        # Trier par score décroissant et prendre les top K
+        sorted_images = sorted(theme_images, key=lambda x: x[1], reverse=True)
+        return sorted_images[:top_k]
+    
 
 print("Début du programme...")
 app = Flask(__name__)
@@ -37,6 +155,8 @@ CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5000", "http://localh
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 OLLAMA_URL = "http://localhost:11434/api/generate"
+image_classifier = RugbyImageClassifier()
+processed_images_cache = {}
 
 def extract_text_from_pdf(pdf_path):
     doc = fitz.open(pdf_path)
@@ -171,8 +291,6 @@ def predict_with_ollama(context, question, model_name="llama3.1"):
     Réponse : """
     result = ollama.generate(model=model_name, prompt=prompt)
     return result["response"]
-
-
 
 class HeaderWithBackground(Flowable):
     def __init__(self, logo_path=None, title_text="Communiqué de presse"):
@@ -383,7 +501,7 @@ def upload():
             summary = summary.replace('*', '')
             all_summaries.append(summary)
 
-        # Résumer les résumés intermédiaires en un résumé final unique
+        
         final_prompt_parts = [base_prompts.get(platform, base_prompts['générique'])]
         if filter_style in filter_prompts:
             final_prompt_parts.append(filter_prompts[filter_style])
@@ -406,5 +524,116 @@ def generate_pdf_route():
     return send_file(output_pdf, mimetype='application/pdf')
 
 
+@app.route('/upload_images', methods=['POST'])
+def upload_images():
+     
+    """
+    Route pour uploader et traiter un ZIP d'images
+    """
+    try:
+        print("[DEBUG] Requête reçue dans /upload_images")
+        if 'zip_file' not in request.files:
+            return jsonify({'error': 'Aucun fichier ZIP fourni'}), 400
+        
+        zip_file = request.files['zip_file']
+        if zip_file.filename == '':
+            return jsonify({'error': 'Nom de fichier vide'}), 400
+        
+        if not zip_file.filename.lower().endswith('.zip'):
+            return jsonify({'error': 'Le fichier doit être un ZIP'}), 400
+        
+        
+        global processed_images_cache
+        processed_images_cache = image_classifier.process_uploaded_zip(zip_file)
+        
+        
+        themes_summary = {}
+        for image_name, data in processed_images_cache.items():
+            theme = data['theme']
+            if theme not in themes_summary:
+                themes_summary[theme] = 0
+            themes_summary[theme] += 1
+        print(f"[DEBUG] Résultats: {processed_images_cache}")
+        
+        return jsonify({
+            'success': True,
+            'message': f'{len(processed_images_cache)} images traitées',
+            'themes_detected': themes_summary,
+            'available_themes': list(image_classifier.themes.keys())
+        })
+        
+    
+    except Exception as e:
+        return jsonify({'error': f'Erreur lors du traitement: {str(e)}'}), 500
+    
+
+@app.route('/select_theme', methods=['POST'])
+def select_theme():
+    """
+    Route pour sélectionner un thème et obtenir les 4 meilleures images (en base64, sans noms ni scores)
+    """
+    try:
+        data = request.get_json()
+        selected_theme = data.get('theme')
+        
+        if not selected_theme:
+            return jsonify({'error': 'Thème non spécifié'}), 400
+        
+        if selected_theme not in image_classifier.themes:
+            return jsonify({'error': 'Thème invalide'}), 400
+        
+        global processed_images_cache
+        if not processed_images_cache:
+            return jsonify({'error': 'Aucune image traitée. Uploadez d\'abord un ZIP.'}), 400
+        
+        # Obtenir les 4 meilleures images
+        top_images = image_classifier.get_top_images_for_theme(
+            processed_images_cache, selected_theme, top_k=4
+        )
+
+        image_list = []
+        for image_name, _ in top_images:
+            image_path = os.path.join('temp_images', image_name)
+            if os.path.exists(image_path):
+                with open(image_path, 'rb') as img_file:
+                    encoded = base64.b64encode(img_file.read()).decode()
+                    image_list.append({
+                        "filename": image_name,
+                        "base64": f"data:image/jpeg;base64,{encoded}"
+                    })
+        
+        return jsonify({
+            'success': True,
+            'images': image_list
+        })
+
+    except Exception as e:
+        return jsonify({'error': f'Erreur lors de la sélection: {str(e)}'}), 500
+    
+@app.route('/get_themes', methods=['GET'])
+def get_themes():
+    """
+    Route pour obtenir la liste des thèmes disponibles
+    """
+    return jsonify({
+        'themes': list(image_classifier.themes.keys())
+    })
+
+@app.route("/generate_img", methods=["POST"])
+def generate_img_route():
+    """
+    Route mise à jour pour la génération d'images (si vous voulez garder cette route)
+    """
+    return jsonify({
+        'message': 'Utilisez /upload_images pour traiter des images',
+        'redirect': '/upload_images'
+    })
+
+@app.route('/get_image/<filename>')
+def get_image(filename):
+    """Route pour servir les images depuis le cache temporaire"""
+    return send_file(os.path.join('temp_images', filename))
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

@@ -9,3 +9,15 @@ ollama
 sentence-transformers
 faiss-cpu
 pdfplumber
+reportlab
+easyocr
+base64
+clip==1.0
+torch                  2.7.0+cpu
+torchaudio               2.7.0+cpu
+torchvision              0.22.0+cpu
+timm==1.0.15
+shutils
+image
+zipfile
+tempfile
