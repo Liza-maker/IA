@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DOCia - Images</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+    
+    <header>
+    DOCia.
+    <a href="doc.html" class="circle-arrow" title="Retour à l'accueil"></a>
+  </header>
+  <p class="sousTitre">Classification et recommandation de vos photos</p>
+
+  <div class="container">
+        <div class="upload-column">
+            <img src="images/Upload-Icon.png" alt="Upload Icon">
+            <p>Déposer votre fichier (Zip)</p>
+            
+            <form id="upload-form" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <input type="file" name="zip_file" accept=".zip" required>
+                </div>
+                
+                <button type="submit" class="upload-btn" id="upload-btn">
+                    Analyser les images
+                </button>
+            </form>
+
+            <div class="theme-selector hidden" id="theme-selector">
+                <h4>Sélectionnez un thème :</h4>
+                <select id="theme-select">
+                    <option value="">-- Choisir un thème --</option>
+                </select>
+                <button type="button" onclick="selectTheme()" id="select-theme-btn">
+                     Voir les meilleures images
+                </button>
+            </div>
+        </div>
+        
+        <div class="results-column">
+            <div class="results-box" id="results-box">
+                <h3>Résultats de l'analyse</h3>
+                <div id="results-content">En attente de votre fichier ZIP...</div>
+                <div class="loading-spinner" id="loading-spinner"></div>
+                <div id="timer"></div>
+                <div id="progress-bar-container" class="progress-container">
+                    <div id="progress-bar" class="progress-bar"></div>
+                
+        </div>
+
+     <script>
+        let timerInterval;
+        let seconds = 0;
+        let availableThemes = [];
+
+        function startTimer() {
+        const timer = document.getElementById("timer");
+        const spinner = document.getElementById("loading-spinner");
+        const progressBar = document.getElementById("progress-bar");
+
+        timer.style.display = 'block';
+        spinner.style.display = 'block';
+        seconds = 0;
+        timer.innerText = "⏱ Temps écoulé : 0 s";
+
+        // Reset barre de progression
+        progressBar.style.width = "0%";
+
+        timerInterval = setInterval(() => {
+            seconds++;
+            timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+
+            const percent = Math.min((seconds / 110) * 100, 100);
+            progressBar.style.width = `${percent}%`;
+
+            if (seconds >= 110) {
+                clearInterval(timerInterval);
+                spinner.style.display = 'none';
+                timer.innerText = "⏱ Temps écoulé : 110 s ";
+            }
+        }, 1000);
+    }
+
+        function stopTimer() {
+            const spinner = document.getElementById("loading-spinner");
+            spinner.style.display = 'none';
+            clearInterval(timerInterval);
+        }
+
+        // Gestion de l'upload du ZIP
+        document.getElementById('upload-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.querySelector('input[name="zip_file"]');
+            const resultsContent = document.getElementById("results-content");
+            const uploadBtn = document.getElementById("upload-btn");
+            
+            if (!fileInput.files.length) {
+                alert("Veuillez d'abord choisir un fichier ZIP.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('zip_file', fileInput.files[0]);
+            
+            resultsContent.innerHTML = " Analyse des images en cours...";
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = "Traitement en cours...";
+            startTimer();
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/upload_images", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Afficher les résultats
+                    let resultHtml = `
+                        <div class="theme-stats">
+                            <h4> Analyse terminée !</h4>
+                            <p><strong>${data.message}</strong></p>
+                        </div>
+                    `;
+
+                    if (data.themes_detected) {
+                        resultHtml += `
+                            <div class="theme-stats">
+                                <h4> Thèmes détectés :</h4>
+                        `;
+                        
+                        for (const [theme, count] of Object.entries(data.themes_detected)) {
+                            resultHtml += `<p><strong>${theme}:</strong> ${count} image(s)</p>`;
+                        }
+                        resultHtml += `</div>`;
+                    }
+
+                    resultsContent.innerHTML = resultHtml;
+
+                    // Remplir le sélecteur de thèmes
+                    availableThemes = data.available_themes || [];
+                    const themeSelect = document.getElementById('theme-select');
+                    themeSelect.innerHTML = '<option value="">-- Choisir un thème --</option>';
+                    
+                    availableThemes.forEach(theme => {
+                        const option = document.createElement('option');
+                        option.value = theme;
+                        option.textContent = theme;
+                        themeSelect.appendChild(option);
+                    });
+
+                    // Afficher le sélecteur de thèmes
+                    document.getElementById('theme-selector').classList.remove('hidden');
+                    
+                    stopTimer();
+                } else {
+                    resultsContent.innerHTML = `❌ Erreur : ${data.error || 'Erreur inconnue'}`;
+                    stopTimer();
+                }
+            } catch (error) {
+                resultsContent.innerHTML = "⚠️ Problème de connexion au serveur.";
+                console.error("Erreur réseau :", error);
+                stopTimer();
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = "📁 Analyser les images";
+            }
+        });
+
+        // Fonction pour sélectionner un thème
+        // Fonction pour sélectionner un thème
+async function selectTheme() {
+    const themeSelect = document.getElementById('theme-select');
+    const selectedTheme = themeSelect.value;
+    const resultsContent = document.getElementById("results-content");
+    const selectBtn = document.getElementById("select-theme-btn");
+
+    if (!selectedTheme) {
+        alert("Veuillez d'abord sélectionner un thème.");
+        return;
+    }
+
+    selectBtn.disabled = true;
+    selectBtn.textContent = "⏳ Recherche...";
+    resultsContent.innerHTML = `🔍 Chargement des meilleures images pour le thème "${selectedTheme}"...`;
+
+    try {
+        const response = await fetch("http://127.0.0.1:5000/select_theme", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ theme: selectedTheme })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            let resultHtml = `
+
+                <div class="image-grid">
+            `;
+
+           data.images.forEach((imgObj, index) => {
+                const base64Img = imgObj.base64;
+                const filename = imgObj.filename;
+
+                resultHtml += `
+                    <img 
+                        src="${base64Img}" 
+                        data-filename="${filename}"
+                        onclick="toggleImageSelection(this)"
+                        class="result-img selectable"
+                        alt="Image ${index + 1}"
+                    >
+                `;
+            });
+
+
+
+
+            resultHtml += `
+                </div>
+                <div class="download-container">
+                    <button onclick="downloadImages(); return false;">Télécharger</button>
+
+                </div>
+            `;
+
+
+            resultsContent.innerHTML = resultHtml;
+
+        } else {
+            resultsContent.innerHTML = `❌ Erreur : ${data.error || 'Erreur inconnue'}`;
+        }
+
+    } catch (error) {
+        resultsContent.innerHTML = "🔗 Problème de connexion au serveur.";
+        console.error("Erreur réseau :", error);
+    } finally {
+        selectBtn.disabled = false;
+        selectBtn.textContent = " Voir les meilleures images";
+    }
+}
+       
+
+
+        // Fonction pour télécharger les images
+       function downloadImages() {
+            const selectedImages = document.querySelectorAll('.result-img.selected');
+
+            if (selectedImages.length === 0) {
+                alert("Veuillez sélectionner au moins une image.");
+                return;
+            }
+
+            selectedImages.forEach((img, index) => {
+                const filename = img.getAttribute("data-filename");
+                const downloadUrl = `http://127.0.0.1:5000/get_image/${filename}`;
+
+                fetch(downloadUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Erreur réseau");
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const blobUrl = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = blobUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();  // 🔽 Téléchargement silencieux
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(blobUrl); // Nettoyage
+                    })
+                    .catch(err => {
+                        console.error("Erreur lors du téléchargement :", err);
+                        alert("Une erreur est survenue lors du téléchargement.");
+                    });
+            });
+        }
+
+        function toggleImageSelection(img) {
+            img.classList.toggle("selected");
+        }
+
+
+
+        // Gestion du glisser-déposer
+        const uploadColumn = document.querySelector('.upload-column');
+        const fileInput = document.querySelector('input[type="file"]');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadColumn.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadColumn.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadColumn.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            uploadColumn.style.transform = 'scale(1.02)';
+            uploadColumn.style.boxShadow = '0 25px 50px rgba(236, 36, 35, 0.3)';
+        }
+
+        function unhighlight(e) {
+            uploadColumn.style.transform = 'scale(1)';
+            uploadColumn.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1)';
+        }
+
+        uploadColumn.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0 && files[0].name.toLowerCase().endsWith('.zip')) {
+                fileInput.files = files;
+            }
+        }
+    </script>
+</body>
+</html>
