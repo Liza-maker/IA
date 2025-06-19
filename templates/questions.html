@@ -34,7 +34,7 @@
     </div>
 
     <div class="summary-column">
-      <h3>Génération du chat...</h3>
+      <h3>Réponse à votre question</h3>
       <p id="summary-text">En attente du fichier</p>
       <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
       <button onclick="location.reload()">Réessayez</button>
@@ -73,7 +73,7 @@ async function submitWithPlatform() {
   const form = document.getElementById("upload-form");
   const formData = new FormData(form);
 
-  summaryText.innerText = "⏳ Génération du résumé en cours...";
+  summaryText.innerText = "⏳ Génération de la réponse en cours...";
   startTimer();
 
   try {
@@ -88,10 +88,12 @@ async function submitWithPlatform() {
         stopTimer();
     } else {
       summaryText.innerText = "❌ Erreur lors de la génération.";
+      stopTimer();
     }
   } catch (error) {
     summaryText.innerText = "⚠️ Problème de connexion.";
     console.error("Erreur réseau :", error);
+    stopTimer();
   }
 }
 </script>
