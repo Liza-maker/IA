@@ -181,6 +181,8 @@ def extract_text_from_pdf(pdf_path):
             os.remove(temp_image_path)
     return text
 
+
+
 # Découpe simple en chunks
 def chunk_text(text, max_words=500):
     words = text.split()
@@ -217,6 +219,16 @@ def readPdfOLD(list_file):
             list_texts.append(text)
     return list_texts
 #document = readPdf(["pdf-exemple.pdf","sample.pdf","rugby.pdf","mes-fiches-animaux-de-la-ferme.pdf","vaches.pdf"])
+
+# pour ajouter une limite de page, tout d'abord je crée une fonction pour calculer le monbre de pages 
+def count_pages(file_storage):
+    """Compte le nombre de pages dans un fichier PDF FileStorage"""
+    try:
+        reader = PdfReader(file_storage)
+        return len(reader.pages)
+    except:
+        return 0
+
 
 def readPdf(list_file):
     """
@@ -350,12 +362,12 @@ class FooterGraphics(Flowable):
         c.restoreState()
 
         # Rectangle rouge — on le place plus à droite et plus haut
-        c.setFillColor(colors.HexColor("#ec2423"))
-        c.saveState()
-        c.translate(x_right - 4*cm, y_bottom + 4*cm)
-        c.rotate(-45)
-        c.rect(0, 0, 1*cm, 3*cm, stroke=0, fill=1)
-        c.restoreState()
+      #  c.setFillColor(colors.HexColor("#ec2423"))
+      #  c.saveState()
+    #    c.translate(x_right - 4*cm, y_bottom + 4*cm)
+      #   c.rotate(-45)
+       # c.rect(0, 0, 1*cm, 3*cm, stroke=0, fill=1)
+        # c.restoreState()
 
 def draw_footer(canvas, doc):
     footer = FooterGraphics()
@@ -413,8 +425,26 @@ def generate_pdf(content, output_path):
 #=================================================================
 @app.route('/questionUtilisateur', methods=['POST'])
 def questionUtilisateur():
-    doc_stock = []
     files = request.files.getlist('file[]')
+    total_pages = 0
+
+    for file in files:
+        if file.filename.lower().endswith('.pdf'):
+            file.seek(0)
+            pages = count_pages(file)
+            print(f"Fichier {file.filename} contient {pages} pages")
+            total_pages += pages
+            file.seek(0)
+
+    print(f"Total pages pour tous les fichiers: {total_pages}")
+
+    if total_pages > 10:
+        print("Limite dépassée, on retourne l'erreur 400")
+        return jsonify({
+            "error": f"Le nombre total de pages dépasse la limite autorisée (10). Actuellement : {total_pages} pages."
+        }), 400
+    # ici doit être un stop de timer 
+    doc_stock = []
     print("=================\n File : ",files)
     text_user = request.form['question']
     if files and text_user:
@@ -432,17 +462,31 @@ def questionUtilisateur():
 def upload():
     start_time = time.time()
     files = request.files.getlist('files')
+    total_pages = 0
+    for file in files:
+        if file.filename.lower().endswith('.pdf'):
+            file.seek(0)
+            pages = count_pages(file)
+            print(f"Fichier {file.filename} contient {pages} pages")
+            total_pages += pages
+            file.seek(0)
+
+    print(f"Total pages pour tous les fichiers: {total_pages}")
+
+    if total_pages > 10:
+        print("Limite dépassée, on retourne l'erreur 400")
+        return jsonify({"error": f"Le nombre total de pages dépasse la limite autorisée (10). Actuellement : {total_pages} pages."}), 400
+
     platform = request.form.get('platform', 'générique')
     filter_style = request.form.get('style_filter', '')
     extra_prompt = request.form.get('custom_prompt', '').strip()
 
     base_prompts = {
         "Instagram": "Crée un résumé percutant pour une post Instagram, en français. Utilise des émojis 🔴🔵✨, des phrases courtes et visuelles. Le texte doit être prêt à être publié. Maximum 80 mots. Termine un post avec les hashtags. ",
-        "Facebook": "Crée un résumé informatif et engageant pour une publication Facebook, en français. Ne rédige aucun commentaire ou note explicative. Le texte doit être prêt à être copié-collé tel quel. Maximum 200 mots. Ne génère qu’un seul résumé unique.",
-        "Linkedin": "Fais un résumé très court et professionnel (moins de 280 caractères) pour un post de Linkedin.",
+        "Facebook": "Crée un résumé informatif et engageant pour une publication Facebook, en français. Ne rédige aucun commentaire ou note explicative. Le texte doit être prêt à être copié-collé tel quel. Maximum 200 mots. Ne génère qu’un seul résumé unique. Utilise des émojis 🔴🔵✨",
+        "Linkedin": "Fais un résumé très court et professionnel (moins de 2800 mots) pour un post de Linkedin.",
         "Site web": "Crée un résumé clair, professionnel et structuré pour un site web.",
-        "Presse": "Rédige un communiqué de presse complet et structuré en français, prêt à être publié. Utilise un ton professionnel et dynamique. Mets en avant l’événement et les détails clés. "
-        "Rédige le texte sous forme fluide et naturelle, divisé en paragraphes, sans titre et sans notes entre crochets ou éléments à compléter. Le texte doit avoir une longueur équivalente à une demi-page A4 et être unique. ",
+        "Presse": "Rédige un communiqué de presse complet et structuré en français, prêt à être publié. Utilise un ton professionnel et dynamique. Mets en avant l’événement et les détails clés. Rédige le texte sous forme fluide et naturelle, divisé en paragraphes, sans titre et sans notes entre crochets ou éléments à compléter. Le texte doit avoir une longueur équivalente à une demi-page A4 et être unique. ",
         "générique": "Fais un résumé court et clair de ce document PDF."
     }
 

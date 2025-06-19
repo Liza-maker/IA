@@ -1,156 +1,168 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DOCia - Résumé</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link href="./css/main.css" rel="stylesheet">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DOCia - Résumé</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet">
+  </head>
+  <body>
 
-  <header>
-    DOCia.
-    <a href="doc.html" class="circle-arrow" title="Retour à l'accueil"></a>
-  </header>
-  <p class="sousTitre">Génération automatique de résumés</p>
+    <header>
+      DOCia.
+      <a href="doc.html" class="circle-arrow" title="Retour à l'accueil"></a>
+    </header>
+    <p class="sousTitre">Génération automatique de résumés</p>
 
-  <div class="container">
-    <div class="upload-column">
-      <img src="images/Upload-Icon.png" alt="Upload Icon">
-      <p>Déposer votre fichier (pdf) ici</p>
-      <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="files" accept=".pdf" multiple required>
-        <input type="hidden" name="platform" id="platform-input">
-      </form>
+    <div class="container">
+      <div class="upload-column">
+        <img src="images/Upload-Icon.png" alt="Upload Icon">
+        <p>Déposer votre fichier (pdf) ici</p>
+        <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+          <input type="file" name="files" accept=".pdf" multiple required>
+          <input type="hidden" name="platform" id="platform-input">
+        </form>
 
-      <textarea id="customPrompt" placeholder="Ajoutez une consigne (ex: Rédigez un résumé au ton journalistique pour un article de presse)..." rows="3"></textarea>
-      <select id="styleFilter">
-        <option value="">Style de résumé (optionnel)</option>
-        <option value="drôle">Résumé drôle</option>
-        <option value="créatif">Résumé créatif</option>
-        <option value="attractif">Résumé attractif</option>
-      </select>
+        <textarea id="customPrompt" placeholder="Ajoutez une consigne (ex: Rédigez un résumé au ton journalistique pour un article de presse)..." rows="3"></textarea>
+        <select id="styleFilter">
+          <option value="">Style de résumé (optionnel)</option>
+          <option value="professionnel">Résumé professionnel</option>
+          <option value="créatif">Résumé créatif</option>
+          <option value="attractif">Résumé attractif</option>
+        </select>
 
-      <div class="socials">
-        <button type="button" onclick="submitWithPlatform(this, 'Instagram')">Instagram</button>
-        <button type="button" onclick="submitWithPlatform(this, 'Linkedin')">LinkedIn</button>
-        <button type="button" onclick="submitWithPlatform(this, 'Facebook')">Facebook</button>
-        <button type="button" onclick="submitWithPlatform(this, 'Presse')">Presse</button>
+        <div class="socials">
+          <button type="button" onclick="submitWithPlatform(this, 'Instagram')">Instagram</button>
+          <button type="button" onclick="submitWithPlatform(this, 'Linkedin')">LinkedIn</button>
+          <button type="button" onclick="submitWithPlatform(this, 'Facebook')">Facebook</button>
+          <button type="button" onclick="submitWithPlatform(this, 'Presse')">Presse</button>
+        </div>
+      </div>
+
+      <div class="summary-column">
+        <h3>Génération du résumé...</h3>
+        <p id="summary-text">En attente du fichier...</p>
+        <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
+
+        <!-- Bloc PDF preview -->
+        <div id="pdf-preview-container">
+          <h4>Aperçu du PDF généré :</h4>
+          <iframe id="pdf-preview"></iframe>
+          <button id="download-pdf-btn">Télécharger le PDF</button>
+        </div>
+
+        <button onclick="location.reload()">Réessayez</button>
       </div>
     </div>
 
-    <div class="summary-column">
-      <h3>Génération du résumé...</h3>
-      <p id="summary-text">En attente du fichier...</p>
-      <div id="timer" style="margin-top: 10px; font-size: 0.9rem; color: #777;"></div>
+    <script>
+      let timerInterval;
+      let seconds = 0;
 
-      <!-- Bloc PDF preview -->
-      <div id="pdf-preview-container">
-        <h4>Aperçu du PDF généré :</h4>
-        <iframe id="pdf-preview"></iframe>
-        <button id="download-pdf-btn">Télécharger le PDF</button>
-      </div>
+      function startTimer() {
+        const timer = document.getElementById("timer");
+        seconds = 0;
+        timer.innerText = "⏱ Temps écoulé : 0 s";
 
-      <button onclick="location.reload()">Réessayez</button>
-    </div>
-  </div>
+        timerInterval = setInterval(() => {
+          seconds++;
+          timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+        }, 1000);
+      }
 
-<script>
-let timerInterval;
-let seconds = 0;
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
 
-function startTimer() {
-  const timer = document.getElementById("timer");
-  seconds = 0;
-  timer.innerText = "⏱ Temps écoulé : 0 s";
+      async function submitWithPlatform(buttonElement, platform) {
+        const fileInput = document.querySelector('input[type="file"]');
+        const platformInput = document.getElementById("platform-input");
+        const summaryText = document.getElementById("summary-text");
+        const customPrompt = document.getElementById("customPrompt").value;
+        const styleFilter = document.getElementById("styleFilter").value;
+        const timerElement = document.getElementById("timer");
+        const pdfPreviewContainer = document.getElementById("pdf-preview-container");
+        const pdfPreview = document.getElementById("pdf-preview");
+        const downloadBtn = document.getElementById("download-pdf-btn");
 
-  timerInterval = setInterval(() => {
-    seconds++;
-    timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
-  }, 1000);
-}
+        if (!fileInput.files.length) {
+          alert("Veuillez d'abord choisir un fichier PDF.");
+          return;
+        }
 
-function stopTimer() {
-  clearInterval(timerInterval);
-}
+        const allButtons = document.querySelectorAll('.socials button');
+        allButtons.forEach(btn => btn.classList.remove('active'));
+        buttonElement.classList.add('active');
 
-async function submitWithPlatform(buttonElement, platform) {
-  const fileInput = document.querySelector('input[type="file"]');
-  const platformInput = document.getElementById("platform-input");
-  const summaryText = document.getElementById("summary-text");
-  const customPrompt = document.getElementById("customPrompt").value;
-  const styleFilter = document.getElementById("styleFilter").value;
-  const timerElement = document.getElementById("timer");
-  const pdfPreviewContainer = document.getElementById("pdf-preview-container");
-  const pdfPreview = document.getElementById("pdf-preview");
-  const downloadBtn = document.getElementById("download-pdf-btn");
+        platformInput.value = platform;
 
-  if (!fileInput.files.length) {
-    alert("Veuillez d'abord choisir un fichier PDF.");
-    return;
-  }
+        const formData = new FormData(document.getElementById("upload-form"));
+        formData.append("custom_prompt", customPrompt);
+        formData.append("style_filter", styleFilter);
 
-  const allButtons = document.querySelectorAll('.socials button');
-  allButtons.forEach(btn => btn.classList.remove('active'));
-  buttonElement.classList.add('active');
+        summaryText.innerText = "⏳ Génération du résumé en cours...";
+        pdfPreviewContainer.style.display = "none";
+        pdfPreview.src = "";
+        startTimer();
 
-  platformInput.value = platform;
+        try {
+          const response = await fetch("http://127.0.0.1:5000/upload", {
+            method: "POST",
+            body: formData
+          });
 
-  const formData = new FormData(document.getElementById("upload-form"));
-  formData.append("custom_prompt", customPrompt);
-  formData.append("style_filter", styleFilter);
+          if (response.ok) {
+            const data = await response.json();
+            summaryText.innerText = data.summary;
+            stopTimer();
+            timerElement.innerText += `  (Durée serveur : ${data.duration}s)`;
 
-  summaryText.innerText = "⏳ Génération du résumé en cours...";
-  pdfPreviewContainer.style.display = "none";
-  pdfPreview.src = "";
-  startTimer();
+            if (platform === "Presse") {
+              // Génération du PDF
+              const pdfResponse = await fetch("http://127.0.0.1:5000/generate_pdf", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ content: data.summary })
+              });
 
-  try {
-    const response = await fetch("http://127.0.0.1:5000/upload", {
-      method: "POST",
-      body: formData
-    });
+              if (pdfResponse.ok) {
+                const blob = await pdfResponse.blob();
+                const pdfUrl = URL.createObjectURL(blob);
+                pdfPreview.src = pdfUrl;
+                pdfPreviewContainer.style.display = "block";
 
-    if (response.ok) {
-      const data = await response.json();
-      summaryText.innerText = data.summary;
-      stopTimer();
-      timerElement.innerText += `  (Durée serveur : ${data.duration}s)`;
+                downloadBtn.onclick = () => {
+                  const a = document.createElement('a');
+                  a.href = pdfUrl;
+                  a.download = "communique_presse.pdf";
+                  a.click();
+                  URL.revokeObjectURL(pdfUrl);
+                };
+              }
+            }
+          } else {
+            // Gestion de l'erreur renvoyée par le serveur (ex: limite dépassée)
+            let errorMessage = "Erreur inconnue.";
+            try {
+              const errorData = await response.json();
+              if (errorData && errorData.error) {
+                errorMessage = errorData.error;
+              }
+            } catch (jsonError) {
+              console.warn("Réponse non-JSON en cas d'erreur :", jsonError);
+            }
 
-      if (platform === "Presse") {
-        // Génération du PDF
-        const pdfResponse = await fetch("http://127.0.0.1:5000/generate_pdf", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({ content: data.summary })
-        });
+            summaryText.innerText = `❌ Erreur : ${errorMessage}`;
+            stopTimer();
+          }
 
-        if (pdfResponse.ok) {
-          const blob = await pdfResponse.blob();
-          const pdfUrl = URL.createObjectURL(blob);
-          pdfPreview.src = pdfUrl;
-          pdfPreviewContainer.style.display = "block";
-
-          downloadBtn.onclick = () => {
-            const a = document.createElement('a');
-            a.href = pdfUrl;
-            a.download = "communique_presse.pdf";
-            a.click();
-            URL.revokeObjectURL(pdfUrl);
-          };
+        } catch (error) {
+          console.error("Erreur de connexion réseau : ", error);
+          summaryText.innerText = "⚠️ Problème de connexion au serveur.";
+          stopTimer();
         }
       }
-    } else {
-      summaryText.innerText = "❌ Erreur lors de la génération.";
-      stopTimer();
-    }
-  } catch (error) {
-    summaryText.innerText = "⚠️ Problème de connexion.";
-    stopTimer();
-  }
-}
-</script>
-
-</body>
+    </script>
+  </body>
 </html>
