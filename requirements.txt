@@ -21,3 +21,4 @@ shutils
 image
 zipfile
 tempfile
+clip
