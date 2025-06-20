@@ -21,4 +21,4 @@ shutils
 image
 zipfile
 tempfile
-clip
+git+https://github.com/openai/CLIP.git
