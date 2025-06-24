@@ -37,6 +37,7 @@ import clip
 
 pdfmetrics.registerFont(TTFont('Anton', 'static/Anton-Regular.ttf'))
 
+device = torch.device("cpu")
 
 class RugbyImageClassifier:
     def __init__(self):

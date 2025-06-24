@@ -12,11 +12,12 @@ pdfplumber
 reportlab
 easyocr
 clip==0.2.0
-torch==2.1.0+cu121
-torchvision==0.16.0
-torchaudio==2.1.0+cu121
---find-links https://download.pytorch.org/whl/torch_stable.html
+torch==2.1.0+cpu
+torchvision==0.16.0+cpu
+torchaudio==2.1.0+cpu
+-f https://download.pytorch.org/whl/torch_stable.html
 timm==1.0.15
 shutils
 image
 clip
+numpy==1.26.4
