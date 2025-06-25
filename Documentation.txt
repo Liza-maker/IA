@@ -7,7 +7,7 @@ A écrire dans votre console PowerShell
 
 3/ Allez dans votre explorateur de fichier et ouvrez là où vous avez effectué le git clone (ici dans Documents\Test)
 
-4/ Lancer Lance_scripts.bat
+4/ Lancer Lance_scripts.ps1
 5/ Attendre 5 secondes
 6/ Accéder à http://localhost:5001/doc.html
 7/ Profiter du site web
