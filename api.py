@@ -17,14 +17,14 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from PIL import Image
-import easyocr
-reader = easyocr.Reader(['fr'])
+#import easyocr
+#reader = easyocr.Reader(['fr'])
 
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable, PageTemplate, BaseDocTemplate, Frame
+from reportlab.platypus import Paragraph, Spacer, Flowable, PageTemplate, BaseDocTemplate, Frame
 from reportlab.lib.units import cm
 
 from reportlab.lib.enums import TA_JUSTIFY
@@ -167,19 +167,7 @@ def extract_text_from_pdf(pdf_path):
         if page_text.strip():
             text += page_text + "\n"
         else:
-            # OCR avec EasyOCR
-            pix = page.get_pixmap()
-            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-            temp_image_path = "temp_image.png"
-            img.save(temp_image_path)
-
-            # Reconnaissance du texte dans l'image
-            results = reader.readtext(temp_image_path, detail=0, paragraph=True)
-            ocr_text = "\n".join(results)
-            text += ocr_text + "\n"
-
-            # Nettoyage du fichier temporaire
-            os.remove(temp_image_path)
+            pass
     return text
 
 
