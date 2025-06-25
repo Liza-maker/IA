@@ -56,40 +56,52 @@
      <script>
         let timerInterval;
         let seconds = 0;
-        let availableThemes = [];
+        let progress = 0;
 
         function startTimer() {
-        const timer = document.getElementById("timer");
-        const spinner = document.getElementById("loading-spinner");
-        const progressBar = document.getElementById("progress-bar");
+            const timer = document.getElementById("timer");
+            const spinner = document.getElementById("loading-spinner");
+            const progressBar = document.getElementById("progress-bar");
 
-        timer.style.display = 'block';
-        spinner.style.display = 'block';
-        seconds = 0;
-        timer.innerText = "⏱ Temps écoulé : 0 s";
+            timer.style.display = 'block';
+            spinner.style.display = 'block';
+            progressBar.style.width = "0%";
 
-        // Reset barre de progression
-        progressBar.style.width = "0%";
+            seconds = 0;
+            progress = 0;
 
-        timerInterval = setInterval(() => {
-            seconds++;
-            timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+            timer.innerText = "⏱ Temps écoulé : 0 s";
 
-            const percent = Math.min((seconds / 110) * 100, 100);
-            progressBar.style.width = `${percent}%`;
-
-            if (seconds >= 110) {
-                clearInterval(timerInterval);
-                spinner.style.display = 'none';
-                timer.innerText = "⏱ Temps écoulé : 110 s ";
-            }
-        }, 1000);
-    }
+            timerInterval = setInterval(() => {
+                seconds++;
+                progress = Math.min(progress + 1, 95); 
+                timer.innerText = `⏱ Temps écoulé : ${seconds} s`;
+                progressBar.style.width = `${progress}%`;
+            }, 1000); 
+        }
 
         function stopTimer() {
-            const spinner = document.getElementById("loading-spinner");
-            spinner.style.display = 'none';
             clearInterval(timerInterval);
+
+            const timer = document.getElementById("timer");
+            const spinner = document.getElementById("loading-spinner");
+            const progressBar = document.getElementById("progress-bar");
+
+            spinner.style.display = 'none';
+
+            
+            let finalProgress = progress;
+            const completeInterval = setInterval(() => {
+                finalProgress++;
+                progressBar.style.width = `${finalProgress}%`;
+                if (finalProgress >= 100) {
+                    clearInterval(completeInterval);
+                    timer.innerText = `⏱ Temps total : ${seconds} s`;
+                }
+            }, 20); 
+
+
+            
         }
 
         // Gestion de l'upload du ZIP
