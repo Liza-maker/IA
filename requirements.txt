@@ -18,3 +18,4 @@ timm==1.0.15
 shutils
 image
 numpy==1.26.4
+git+https://github.com/openai/CLIP.git@<commit-hash>
