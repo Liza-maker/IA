@@ -17,5 +17,4 @@ torchaudio==2.1.0+cpu
 timm==1.0.15
 shutils
 image
-clip
 numpy==1.26.4
